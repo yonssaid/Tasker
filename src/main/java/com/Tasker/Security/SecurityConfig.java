@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,8 +22,9 @@ public class SecurityConfig {
     @Bean
     public DefaultSecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
         return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry->{
-                    registry.requestMatchers("/api/auth/**").permitAll();
+                    registry.requestMatchers("/api/auth/**", "/homepage", "/registerpage").permitAll();
                     registry.requestMatchers("/admin/**").hasRole("ADMIN");
                     registry.requestMatchers("/api/users/**").hasRole("USER");
                     registry.anyRequest().authenticated();

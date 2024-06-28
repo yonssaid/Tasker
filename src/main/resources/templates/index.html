@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Tasker!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #ff758c, #ff7eb3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border-radius: 10px;
+            width: 350px;
+            padding: 30px;
+            text-align: center;
+            color: #333;
+        }
+
+        h1 {
+            color: #ff758c;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .bunny-img {
+            width: 150px;
+            height: auto;
+            margin: 20px 0;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .buttons a {
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .buttons a.register {
+            background: #ff758c;
+        }
+
+        .buttons a.register:hover {
+            background: #ff6a75;
+        }
+
+        .buttons a.login {
+            background: #ff7eb3;
+        }
+
+        .buttons a.login:hover {
+            background: #ff68a3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to Tasker</h1>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Cartoon_rabbit.svg/800px-Cartoon_rabbit.svg.png" alt="Bunny Clipart" class="bunny-img">
+
+    <div class="buttons">
+        <a href="/registerpage" class="register">Register</a>
+        <a href="/loginpage" class="login">Login</a>
+    </div>
+</div>
+</body>
+</html>

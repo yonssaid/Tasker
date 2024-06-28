@@ -38,10 +38,6 @@ public class AuthenticationController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping("registerpage")
-    public String showRegistrationForm() {
-        return "register";
-    }
 
     @PostMapping("login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
@@ -68,14 +64,8 @@ public class AuthenticationController {
         user.setFirstName(registerDto.getFirstName());
         user.setLastName(registerDto.getLastName());
 
-        Role userRole;
-        if (registerDto.getRole() != null && !registerDto.getRole().isEmpty()) {
-            userRole = roleRepository.findByName(registerDto.getRole())
-                    .orElseThrow(() -> new RuntimeException(registerDto.getRole() + " role not set."));
-        } else {
-            userRole = roleRepository.findByName("USER")
-                    .orElseThrow(() -> new RuntimeException("User role not set."));
-        }
+        Role userRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new RuntimeException("User role not set."));
 
         user.setRole(userRole);
         userRepository.save(user);
