@@ -17,35 +17,104 @@
 
         .container {
             background: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            border-radius: 10px;
-            width: 350px;
-            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            width: 400px;
+            padding: 40px;
             text-align: center;
             color: #333;
+            position: relative;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
         }
 
         h1 {
             color: #ff758c;
-            margin-bottom: 20px;
-            font-size: 2em;
+            font-size: 2.5em;
+            margin: 0;
         }
 
         .bunny-img {
-            width: 150px;
+            width: 50px;
             height: auto;
-            margin: 20px 0;
+            margin-right: 10px;
+        }
+
+        .profile-section {
+            background: #f7f7f7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+            font-size: 1.2em;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: #ff758c;
+        }
+
+        .username {
+            font-weight: bold;
+            color: #ff758c;
+        }
+
+        .post-section {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .post {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .post-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background-color: #ff7eb3;
+        }
+
+        .post-username {
+            font-weight: bold;
         }
 
         .buttons {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
         }
 
         .buttons a {
             text-decoration: none;
-            padding: 10px;
+            padding: 10px 20px;
             border-radius: 5px;
             color: white;
             font-weight: bold;
@@ -71,8 +140,35 @@
 </head>
 <body>
 <div class="container">
-    <h1>Welcome to Tasker</h1>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Cartoon_rabbit.svg/800px-Cartoon_rabbit.svg.png" alt="Bunny Clipart" class="bunny-img">
+    <div class="header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Cartoon_rabbit.svg/800px-Cartoon_rabbit.svg.png" alt="Bunny" class="bunny-img">
+        <h1>Tasker</h1>
+    </div>
+
+    <div class="profile-section">
+        <div class="user-info">
+            <div class="avatar"></div>
+            <span class="username">@yonssaid</span>
+        </div>
+        <p>Welcome back! Ready to conquer your tasks?</p>
+    </div>
+
+    <div class="post-section">
+        <div class="post">
+            <div class="post-header">
+                <div class="post-avatar"></div>
+                <span class="post-username">@user1</span>
+            </div>
+            <p>Just completed a big task! Feeling accomplished.</p>
+        </div>
+        <div class="post">
+            <div class="post-header">
+                <div class="post-avatar"></div>
+                <span class="post-username">@user2</span>
+            </div>
+            <p>Trying out Tasker for the first time. Loving it so far!</p>
+        </div>
+    </div>
 
     <div class="buttons">
         <a href="/registerpage" class="register">Register</a>
