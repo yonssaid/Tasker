@@ -1,7 +1,7 @@
 package com.Tasker.Services;
 
 import com.Tasker.Models.Role;
-import com.Tasker.Models.User;
+import com.Tasker.Models.MyUser;
 import com.Tasker.Repositories.RoleRepository;
 import com.Tasker.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,29 +21,29 @@ public class AdminService {
         this.roleRepository = roleRepository;
     }
 
-    public List<User> getAllUsers() {
+    public List<MyUser> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public User createUser(User user) {
+    public MyUser createUser(MyUser myUser) {
         // Set default role to USER if not provided
-        if (user.getRole() == null ) {
+        if (myUser.getRole() == null ) {
             Role userRole = roleRepository.findByName("USER").orElseThrow(() -> new RuntimeException("Default role USER not found"));
-            user.setRole(userRole);
+            myUser.setRole(userRole);
         }
-        return userRepository.save(user);
+        return userRepository.save(myUser);
     }
 
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
     }
 
-    public User updateUser(Long id, User updatedUser) {
-        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        user.setUsername(updatedUser.getUsername());
-        user.setPassword(updatedUser.getPassword()); // Ideally, encode the password
-        user.setRole(updatedUser.getRole());
-        return userRepository.save(user);
+    public MyUser updateUser(Long id, MyUser updatedMyUser) {
+        MyUser myUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        myUser.setUsername(updatedMyUser.getUsername());
+        myUser.setPassword(updatedMyUser.getPassword()); // Ideally, encode the password
+        myUser.setRole(updatedMyUser.getRole());
+        return userRepository.save(myUser);
     }
 }
 

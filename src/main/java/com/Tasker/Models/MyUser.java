@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class MyUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -31,10 +31,10 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
-    public User() {
+    public MyUser() {
     }
 
-    public User(String username, String password, String email, Role role) {
+    public MyUser(String username, String password, String email, Role role) {
         this.username = username;
         this.password = password;
         this.email = email;

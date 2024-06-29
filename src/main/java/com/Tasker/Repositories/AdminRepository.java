@@ -1,7 +1,7 @@
 package com.Tasker.Repositories;
 
-import com.Tasker.Models.User;
+import com.Tasker.Models.MyUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface AdminRepository extends JpaRepository<User, Long> {
+public interface AdminRepository extends JpaRepository<MyUser, Long> {
 }

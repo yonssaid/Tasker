@@ -2,8 +2,8 @@ package com.Tasker.Controllers;
 
 import com.Tasker.Dto.LoginDto;
 import com.Tasker.Dto.RegisterDto;
+import com.Tasker.Models.MyUser;
 import com.Tasker.Models.Role;
-import com.Tasker.Models.User;
 import com.Tasker.Repositories.RoleRepository;
 import com.Tasker.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,19 +56,19 @@ public class AuthenticationController {
             return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
         }
 
-        User user = new User();
-        user.setUsername(registerDto.getUsername());
-        user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        user.setEmail(registerDto.getEmail());
-        user.setAge(registerDto.getAge());
-        user.setFirstName(registerDto.getFirstName());
-        user.setLastName(registerDto.getLastName());
+        MyUser myUser = new MyUser();
+        myUser.setUsername(registerDto.getUsername());
+        myUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+        myUser.setEmail(registerDto.getEmail());
+        myUser.setAge(registerDto.getAge());
+        myUser.setFirstName(registerDto.getFirstName());
+        myUser.setLastName(registerDto.getLastName());
 
         Role userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new RuntimeException("User role not set."));
 
-        user.setRole(userRole);
-        userRepository.save(user);
+        myUser.setRole(userRole);
+        userRepository.save(myUser);
 
         return new ResponseEntity<>("User has been registered successfully!", HttpStatus.OK);
     }

@@ -1,7 +1,7 @@
 package com.Tasker.Controllers;
 
 
-import com.Tasker.Models.User;
+import com.Tasker.Models.MyUser;
 import com.Tasker.Services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +26,13 @@ public class AdminController {
         return ResponseEntity.ok("admin endpoint is accessible");
     }
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<MyUser>> getAllUsers() {
         return ResponseEntity.ok(adminService.getAllUsers());
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(adminService.createUser(user));
+    public ResponseEntity<MyUser> createUser(@RequestBody MyUser myUser) {
+        return ResponseEntity.ok(adminService.createUser(myUser));
     }
 
     @DeleteMapping("/users/{id}")
@@ -42,7 +42,7 @@ public class AdminController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return ResponseEntity.ok(adminService.updateUser(id, user));
+    public ResponseEntity<MyUser> updateUser(@PathVariable Long id, @RequestBody MyUser myUser) {
+        return ResponseEntity.ok(adminService.updateUser(id, myUser));
     }
 }

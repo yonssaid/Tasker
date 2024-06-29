@@ -1,9 +1,10 @@
 package com.Tasker.Services;
 
+import com.Tasker.Models.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.Tasker.Repositories.UserRepository;
-import com.Tasker.Models.User;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,15 +14,15 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User save(User user) {
-        return userRepository.save(user);
+    public MyUser save(MyUser myUser) {
+        return userRepository.save(myUser);
     }
 
-    public List<User> findAll() {
+    public List<MyUser> findAll() {
         return userRepository.findAll();
     }
 
-    public Optional<User> findById(Long id) {
+    public Optional<MyUser> findById(Long id) {
         return userRepository.findById(id);
     }
 

@@ -29,7 +29,7 @@ public class Task {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_to")
-    private User assignedTo;
+    private MyUser assignedTo;
 
     @ManyToMany
     @JoinTable(
@@ -64,9 +64,9 @@ public class Task {
 
     public LocalDate getDeadline() {return deadline;}
 
-    public void setAssignedTo(User assignedTo) {this.assignedTo = assignedTo;}
+    public void setAssignedTo(MyUser assignedTo) {this.assignedTo = assignedTo;}
 
-    public User getAssignedTo() {return assignedTo;}
+    public MyUser getAssignedTo() {return assignedTo;}
 
     public void setCategories(Set categories) {this.categories = categories;}
 

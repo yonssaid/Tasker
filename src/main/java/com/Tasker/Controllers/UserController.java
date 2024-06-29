@@ -1,6 +1,6 @@
 package com.Tasker.Controllers;
 
-import com.Tasker.Models.User;
+import com.Tasker.Models.MyUser;
 import com.Tasker.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +17,18 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.save(user);
+    public MyUser createUser(@RequestBody MyUser myUser) {
+        return userService.save(myUser);
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<MyUser> getAllUsers() {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.findById(id);
+    public ResponseEntity<MyUser> getUserById(@PathVariable Long id) {
+        Optional<MyUser> user = userService.findById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
