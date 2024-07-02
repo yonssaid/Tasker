@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasker</title>
+    <title>Login to Tasker</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -104,62 +104,66 @@
             display: flex;
             min-height: 80vh;
             margin-top: 80px; /* Adjusted to account for fixed nav */
-            background: url('img/hero.jpg') no-repeat center center/cover;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 49%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 0;
-            display: flex;
-            justify-content: center;
+            background-color: #fff; /* Changed background color */
             align-items: center;
+            justify-content: center;
+        }
+
+        .login-form {
+            width: 300px;
+            background-color: #fff;
             padding: 20px;
-        }
-
-        .content {
-            z-index: 1;
-            color: #fff;
-            text-align: left;
-            max-width: 80%; /* Adjusted max-width for content */
-        }
-
-        .content .slogan {
-            font-size: 36px; /* Adjusted font size */
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .content p {
-            font-size: 18px; /* Adjusted font size */
-            margin-bottom: 20px;
-        }
-
-        .signup-button {
-            display: block;
-            width: 100%;
-            padding: 15px 0;
-            background: #1f66e5; /* Solid blue color */
-            color: #fff;
-            text-decoration: none;
-            font-size: 20px;
-            text-align: center;
             border-radius: 8px;
-            transition: background 0.3s, color 0.3s, border 0.3s;
-            margin-top: 20px; /* Adjusted margin */
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
 
-        .signup-button:hover {
-            background: linear-gradient(45deg, #2575fc, #6a11cb);
+        .login-form h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1f66e5;
             color: #fff;
-            border: 2px solid #2575fc;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .login-form button:hover {
+            background-color: #2575fc;
+        }
+
+        .register-link {
+            margin-top: 10px;
+            color: #1f66e5;
+            font-size: 14px;
+        }
+
+        .register-link a {
+            color: #1f66e5;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .register-link a:hover {
+            color: #2575fc;
         }
 
         footer {
@@ -203,17 +207,19 @@
         <li><a href="/aboutus">About Us</a></li>
         <li><a href="/contact">Contact</a></li>
         <li class="signup"><a href="/registerpage">Signup</a></li>
-        <li><a href="/login">Login</a></li>
+        <li><a href="/loginpage">Login</a></li>
     </ul>
 </nav>
 <main>
-    <div class="overlay">
-        <div class="content">
-            <div class="feature-section">
-                <p class="slogan">Master your day, one task at a time!</p>
-                <p>Customize your task lists and track your progress effortlessly with Tasker.</p>
-                <a href="/registerpage" class="signup-button">Sign up for free!</a>
-            </div>
+    <div class="login-form">
+        <h2>Login to Tasker</h2>
+        <form action="/login" method="post">
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
+        <div class="register-link">
+            <p>Don't have an account? <a href="/registerpage">Click here to register!</a></p>
         </div>
     </div>
 </main>

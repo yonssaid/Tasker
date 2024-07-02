@@ -12,8 +12,14 @@ public class ViewController {
         return "register";
     }
 
-    @GetMapping("/home")
+    @GetMapping("/")
     public String showHomePage() {
         return "index";
     }
+
+    @GetMapping("/login")
+    public String showLoginForm(){ return "login";}
+
+    @GetMapping("/user/home")
+    public String showUserHome(){return "userhome";}
 }

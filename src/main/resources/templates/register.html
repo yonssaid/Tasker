@@ -3,95 +3,271 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
+  <title>Register for Tasker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to right, #00c6ff, #0072ff);
-        }
-        .container {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        h2 {
-            margin-bottom: 20px;
-            color: #333333;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
             text-align: center;
         }
-        .form-group {
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        nav .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        nav .logo span {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 5px; /* Adjusted margin */
+        }
+
+        nav ul li:last-child {
+            margin-right: 20px; /* Larger margin for the last item */
+        }
+
+        nav ul li.signup {
+            position: relative;
+        }
+
+        nav ul li.signup::before {
+            content: '';
+            position: absolute;
+            width: calc(100% + 20px);
+            height: 140%; /* Increased height */
+            top: -10%; /* Adjusted top position */
+            left: -10px;
+            background-color: #1f66e5;
+            border-radius: 20px;
+            z-index: -1;
+            transform: scaleY(0.8); /* Adjust the curve effect */
+            transition: transform 0.3s;
+        }
+
+        nav ul li.signup:hover::before {
+            transform: scaleY(1);
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #555; /* Changed default color */
+            font-weight: 600;
+            padding: 10px 15px; /* Adjusted padding */
+            transition: color 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav ul li a:hover {
+            color: #1f66e5;
+        }
+
+        nav ul li.signup a:hover {
+            color: #fff;
+        }
+
+        main {
+            display: flex;
+            min-height: 80vh;
+            margin-top: 80px; /* Adjusted to account for fixed nav */
+            background-color: #fff; /* Changed background color */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .register-form {
+            width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .register-form h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .register-form .form-group {
             margin-bottom: 15px;
         }
-        .form-group label {
+
+        .register-form .form-group label {
             display: block;
             margin-bottom: 5px;
-            color: #333333;
+            color: #333;
         }
-        .form-group input {
-            width: 100%;
+
+        .register-form .form-group input {
+            width: calc(100% - 20px);
             padding: 10px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
             box-sizing: border-box;
         }
-        .btn {
+
+        .register-form .btn {
             width: 100%;
-            padding: 10px;
-            background: #0072ff;
+            padding: 12px;
+            background-color: #1f66e5;
+            color: #fff;
             border: none;
-            border-radius: 5px;
-            color: #ffffff;
-            font-size: 16px;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
             margin-top: 10px;
         }
-        .btn:hover {
-            background: #005bb5;
+
+        .register-form .btn:hover {
+            background-color: #2575fc;
         }
-        .form-group input:focus {
+
+        .register-form .form-group input:focus {
             outline: none;
-            border-color: #0072ff;
+            border-color: #1f66e5;
+        }
+
+        .login-link {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        .login-link a {
+            color: #1f66e5;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .login-link a:hover {
+            color: #2575fc;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 20px; /* Adjusted margin */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .social-icons a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #6a11cb;
         }
     </style>
 </head>
 <body>
-<div class="container">
-  <h2>Register</h2>
-  <form id="registerForm">
-    <div class="form-group">
-      <label for="username">Username</label>
-      <input type="text" id="username" name="username" required>
+<nav>
+  <div class="logo">
+    <img src="/img/Tasker_Logo.png" alt="Tasker Logo">
+    <span>TASKER</span>
+  </div>
+  <ul>
+    <li><a href="/features">Features</a></li>
+    <li><a href="/aboutus">About Us</a></li>
+    <li><a href="/contact">Contact</a></li>
+    <li class="signup"><a href="/registerpage">Signup</a></li>
+    <li><a href="/loginpage">Login</a></li>
+  </ul>
+</nav>
+<main>
+  <div class="register-form">
+    <h2>Register for Tasker</h2>
+    <form id="registerForm">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="age">Age</label>
+        <input type="number" id="age" name="age" required>
+      </div>
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" name="firstName" required>
+      </div>
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastName" required>
+      </div>
+      <button type="submit" class="btn">Register</button>
+    </form>
+    <div class="login-link">
+      <p>Already have an account? <a href="/loginpage">Login here</a></p>
     </div>
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" required>
-    </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" id="email" name="email" required>
-    </div>
-    <div class="form-group">
-      <label for="age">Age</label>
-      <input type="number" id="age" name="age" required>
-    </div>
-    <div class="form-group">
-      <label for="firstName">First Name</label>
-      <input type="text" id="firstName" name="firstName" required>
-    </div>
-    <div class="form-group">
-      <label for="lastName">Last Name</label>
-      <input type="text" id="lastName" name="lastName" required>
-    </div>
-    <button type="submit" class="btn">Register</button>
-  </form>
-</div>
+  </div>
+</main>
+<footer>
+  <div class="social-icons">
+    <a href="#"><i class="fab fa-facebook-f"></i></a>
+    <a href="#"><i class="fab fa-twitter"></i></a>
+    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+    <a href="#"><i class="fab fa-instagram"></i></a>
+  </div>
+  <p>&copy; 2024 Tasker. All rights reserved.</p>
+</footer>
 
 <script>
     document.getElementById('registerForm').addEventListener('submit', function(event) {
@@ -108,7 +284,7 @@
         })
         .then(response => {
             if (response.ok) {
-                window.location.href = '/'; // Redirect to homepage on success
+                window.location.href = '/user/home'; // Redirect to user's home page on success
             } else {
                 return response.text().then(text => { throw new Error(text) });
             }
@@ -118,5 +294,7 @@
         });
     });
 </script>
+
+
 </body>
 </html>

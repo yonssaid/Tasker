@@ -41,7 +41,6 @@ public class MyUser {
         this.role = role;
     }
 
-    // Getters and setters
     public Long getUserId() {
         return userId;
     }

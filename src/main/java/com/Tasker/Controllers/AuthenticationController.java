@@ -6,6 +6,8 @@ import com.Tasker.Models.MyUser;
 import com.Tasker.Models.Role;
 import com.Tasker.Repositories.RoleRepository;
 import com.Tasker.Repositories.UserRepository;
+import com.Tasker.Security.JWTService;
+import com.Tasker.Security.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,10 +27,17 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
 
-    private AuthenticationManager authenticationManager;
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private JWTService jwtService;
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
+
 
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository,
@@ -71,5 +81,17 @@ public class AuthenticationController {
         userRepository.save(myUser);
 
         return new ResponseEntity<>("User has been registered successfully!", HttpStatus.OK);
+    }
+
+    @PostMapping("token")
+    public String authenticateAndGetToken(@RequestBody LoginDto loginDto) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginDto.getUsername(), loginDto.getPassword()
+        ));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken(myUserDetailsService.loadUserByUsername(loginDto.getUsername()));
+        } else {
+            throw new UsernameNotFoundException("Credentials are invalid!");
+        }
     }
 }
