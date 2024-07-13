@@ -2,6 +2,7 @@ package com.Tasker.Services;
 
 import com.Tasker.Models.MyUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import com.Tasker.Repositories.UserRepository;
 
@@ -24,6 +25,10 @@ public class UserService {
 
     public Optional<MyUser> findById(Long id) {
         return userRepository.findById(id);
+    }
+    public MyUser findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 
 

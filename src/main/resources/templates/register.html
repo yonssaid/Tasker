@@ -34,6 +34,13 @@
             align-items: center;
         }
 
+        nav .logo a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+
         nav .logo img {
             height: 40px;
             margin-right: 10px;
@@ -42,8 +49,8 @@
         nav .logo span {
             font-size: 24px;
             font-weight: 600;
-            color: #333;
         }
+
 
         nav ul {
             list-style: none;
@@ -213,15 +220,17 @@
 <body>
 <nav>
   <div class="logo">
-    <img src="/img/Tasker_Logo.png" alt="Tasker Logo">
-    <span>TASKER</span>
+    <a href="/">
+      <img src="/img/Tasker_Logo.png" alt="Tasker Logo">
+      <span>TASKER</span>
+    </a>
   </div>
   <ul>
     <li><a href="/features">Features</a></li>
     <li><a href="/aboutus">About Us</a></li>
     <li><a href="/contact">Contact</a></li>
-    <li class="signup"><a href="/registerpage">Signup</a></li>
-    <li><a href="/loginpage">Login</a></li>
+    <li class="signup"><a href="/register">Signup</a></li>
+    <li><a href="/login">Login</a></li>
   </ul>
 </nav>
 <main>
@@ -255,7 +264,7 @@
       <button type="submit" class="btn">Register</button>
     </form>
     <div class="login-link">
-      <p>Already have an account? <a href="/loginpage">Login here</a></p>
+      <p>Already have an account? <a href="/login">Login here</a></p>
     </div>
   </div>
 </main>

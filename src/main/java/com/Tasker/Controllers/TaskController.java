@@ -1,9 +1,12 @@
 package com.Tasker.Controllers;
 
+import com.Tasker.Models.MyUser;
 import com.Tasker.Models.Task;
 import com.Tasker.Services.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +19,14 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @PostMapping
+    @PostMapping("/tasks")
     public Task createTask(@RequestBody Task task) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MyUser currentUser = (MyUser) authentication.getPrincipal();
+
+        task.setUser(currentUser);
+
         return taskService.save(task);
     }
 

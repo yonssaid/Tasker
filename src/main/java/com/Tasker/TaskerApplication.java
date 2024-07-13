@@ -7,7 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class TaskerApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TaskerApplication.class, args);
+		try {
+			SpringApplication.run(TaskerApplication.class, args);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-
 }

@@ -34,6 +34,13 @@
             align-items: center;
         }
 
+        nav .logo a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+
         nav .logo img {
             height: 40px;
             margin-right: 10px;
@@ -42,7 +49,6 @@
         nav .logo span {
             font-size: 24px;
             font-weight: 600;
-            color: #333;
         }
 
         nav ul {
@@ -199,27 +205,29 @@
 <body>
 <nav>
     <div class="logo">
-        <img src="/img/Tasker_Logo.png" alt="Tasker Logo">
-        <span>TASKER</span>
+        <a href="/">
+            <img src="/img/Tasker_Logo.png" alt="Tasker Logo">
+            <span>TASKER</span>
+        </a>
     </div>
     <ul>
         <li><a href="/features">Features</a></li>
         <li><a href="/aboutus">About Us</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li class="signup"><a href="/registerpage">Signup</a></li>
-        <li><a href="/loginpage">Login</a></li>
+        <li class="signup"><a href="/register">Signup</a></li>
+        <li><a href="/login">Login</a></li>
     </ul>
 </nav>
 <main>
     <div class="login-form">
         <h2>Login to Tasker</h2>
-        <form action="/login" method="post">
-            <input type="text" name="username" placeholder="Username" required><br>
-            <input type="password" name="password" placeholder="Password" required><br>
+        <form id="loginForm">
+            <input type="text" id="username" name="username" placeholder="Username" required><br>
+            <input type="password" id="password" name="password" placeholder="Password" required><br>
             <button type="submit">Login</button>
         </form>
         <div class="register-link">
-            <p>Don't have an account? <a href="/registerpage">Click here to register!</a></p>
+            <p>Don't have an account? <a href="/register">Click here to register!</a></p>
         </div>
     </div>
 </main>
@@ -232,5 +240,31 @@
     </div>
     <p>&copy; 2024 Tasker. All rights reserved.</p>
 </footer>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        const response = await fetch('/api/auth/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('token', data.token);
+            window.location.href = '/user/home';
+        } else {
+            const errorMessage = await response.text();
+            console.error(errorMessage);
+        }
+    });
+</script>
+
 </body>
 </html>

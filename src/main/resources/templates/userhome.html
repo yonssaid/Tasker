@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Home - Tasker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        nav .logo a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+
+        nav .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        nav .logo span {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            margin-top: 80px;
+        }
+
+        .task-board {
+            width: 100%;
+            max-width: 1200px;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .task-board h2 {
+            margin: 0;
+        }
+
+        .task-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .task-table th,
+        .task-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .task-table th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+
+        .task-table td button {
+            cursor: pointer;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            text-transform: capitalize;
+            width: 100px;
+        }
+
+        .task-table td button.ongoing {
+            background-color: orange;
+            color: white;
+        }
+
+        .task-table td button.completed {
+            background-color: green;
+            color: white;
+        }
+
+        .task-table td button.missed {
+            background-color: red;
+            color: white;
+        }
+
+        /* Modal styles (unchanged from previous implementation) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .modal-content input,
+        .modal-content button {
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 16px;
+            width: calc(100% - 20px);
+        }
+
+        .modal-content button {
+            cursor: pointer;
+            background-color: #1f66e5;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <div class="logo">
+        <a href="/">
+            <img src="/img/Tasker_Logo.png" alt="Tasker Logo">
+            <span>TASKER</span>
+        </a>
+    </div>
+</nav>
+<main>
+    <div class="task-board">
+        <h2>Task Dashboard</h2>
+        <button onclick="openModal()">Create Task</button>
+    </div>
+    <div class="task-board">
+        <!-- Table for task list -->
+        <table class="task-table">
+            <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Description</th>
+                <th>End Date</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody id="taskList">
+            <!-- Tasks will be populated here by API -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for creating tasks (unchanged from previous implementation) -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Create New Task</h2>
+            <form id="taskFormModal">
+                <input type="text" id="modalTitle" placeholder="Title" required>
+                <input type="text" id="modalDescription" placeholder="Description">
+                <input type="date" id="modalDeadline" placeholder="Deadline" required>
+                <button type="submit">Create Task</button>
+            </form>
+        </div>
+    </div>
+</main>
+<script>
+    const apiUrl = '/api/tasks';
+
+    // Function to retrieve JWT token from local storage
+    function getToken() {
+        return localStorage.getItem('jwtToken');
+    }
+
+    // Function to create a new task
+    async function createTask(task) {
+        const token = getToken();
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include JWT token here
+            },
+            body: JSON.stringify(task)
+        });
+        return response.json();
+    }
+
+    // Function to fetch all tasks
+    async function getAllTasks() {
+        const token = getToken();
+        const response = await fetch(apiUrl, {
+            headers: {
+                'Authorization': `Bearer ${token}` // Include JWT token here
+            }
+        });
+        return response.json();
+    }
+
+    // Function to update task status
+    async function updateTaskStatus(id, newStatus) {
+        const token = getToken();
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Include JWT token here
+            },
+            body: JSON.stringify({ status: newStatus })
+        });
+        return response.ok;
+    }
+
+    // Function to delete a task
+    async function deleteTask(id) {
+        const token = getToken();
+        const response = await fetch(`${apiUrl}/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}` // Include JWT token here
+            }
+        });
+        return response.ok;
+    }
+
+    // Function to render tasks in the table
+    function renderTasks(tasks) {
+        const taskList = document.getElementById('taskList');
+        taskList.innerHTML = '';
+        tasks.forEach(task => {
+            const tr = document.createElement('tr');
+            const deadline = calculateDeadlineDisplay(task.deadline);
+            const isPastDue = new Date(task.deadline) < new Date();
+
+            tr.innerHTML = `
+                <td><a href="#" onclick="viewTaskDetails(${task.id})">${task.title}</a></td>
+                <td>${truncateDescription(task.description)}</td>
+                <td>${deadline}</td>
+                <td>
+                    <button class="${getStatusButtonClass(task.status)}" onclick="toggleTaskStatus(${task.id}, '${task.status}')">
+                        ${isPastDue ? 'Missed' : task.status}
+                    </button>
+                </td>
+            `;
+            taskList.appendChild(tr);
+        });
+    }
+
+    // Function to calculate deadline display
+    function calculateDeadlineDisplay(deadline) {
+        const now = new Date();
+        const end = new Date(deadline);
+        const diffTime = Math.abs(end - now);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays > 7) {
+            return deadline; // Show actual date if less than 7 days left
+        } else {
+            return `${diffDays} days`; // Show number of days remaining
+        }
+    }
+
+    // Function to truncate task description for display
+    function truncateDescription(description) {
+        const maxLength = 50;
+        return description.length > maxLength ? description.substring(0, maxLength) + '...' : description;
+    }
+
+    // Function to get status button class based on task status
+    function getStatusButtonClass(status) {
+        switch (status) {
+            case 'Ongoing':
+                return 'ongoing';
+            case 'Completed':
+                return 'completed';
+            case 'Missed':
+                return 'missed';
+            default:
+                return '';
+        }
+    }
+
+    // Function to toggle task status
+    async function toggleTaskStatus(id, currentStatus) {
+        let newStatus;
+        switch (currentStatus) {
+            case 'Ongoing':
+                newStatus = 'Completed';
+                break;
+            case 'Completed':
+                newStatus = 'Ongoing';
+                break;
+            case 'Missed':
+                newStatus = 'Ongoing';
+                break;
+            default:
+                newStatus = 'Ongoing';
+                break;
+        }
+        const success = await updateTaskStatus(id, newStatus);
+        if (success) {
+            loadTasks();
+        } else {
+            alert('Failed to update task status.');
+        }
+    }
+
+    // Function to load all tasks on page load
+    async function loadTasks() {
+        const tasks = await getAllTasks();
+        renderTasks(tasks);
+    }
+
+    // Function to open create task modal
+    async function openModal() {
+        const modal = document.getElementById('taskModal');
+        modal.style.display = 'block';
+    }
+
+    // Function to close create task modal
+    function closeModal() {
+        const modal = document.getElementById('taskModal');
+        modal.style.display = 'none';
+    }
+
+    // Event listener for submitting create task form
+    document.getElementById('taskFormModal').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const title = document.getElementById('modalTitle').value;
+        const description = document.getElementById('modalDescription').value;
+        const deadline = document.getElementById('modalDeadline').value;
+
+        const newTask = { title, description, deadline, status: 'Ongoing' };
+        await createTask(newTask);
+        closeModal();
+        loadTasks();
+    });
+
+    // Event listener when DOM content is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        loadTasks();
+    });
+
+    // Placeholder function for viewing task details
+    function viewTaskDetails(id) {
+        console.log(`View details for task with ID ${id}`);
+    }
+</script>
+
+</body>
+</html>

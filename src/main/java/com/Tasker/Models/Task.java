@@ -31,6 +31,11 @@ public class Task {
     @JoinColumn(name = "assigned_to")
     private MyUser assignedTo;
 
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private MyUser user;
+
     @ManyToMany
     @JoinTable(
             name = "task_category",
@@ -71,6 +76,14 @@ public class Task {
     public void setCategories(Set categories) {this.categories = categories;}
 
     public Set getCategories() {return categories;}
+
+    public MyUser getUser() {
+        return user;
+    }
+
+    public void setUser(MyUser user) {
+        this.user = user;
+    }
 
 }
 

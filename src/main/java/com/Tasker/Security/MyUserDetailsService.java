@@ -30,7 +30,7 @@ public class MyUserDetailsService implements UserDetailsService {
             return User.builder()
                     .username(userObject.getUsername())
                     .password(userObject.getPassword())
-                    .roles(userObject.getRole().getName()) // Directly get the role name
+                    .roles(userObject.getRole().getName())
                     .build();
         } else {
             logger.warning("User not found: " + username);

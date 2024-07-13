@@ -12,14 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.util.Map;
 
 
 @RestController
@@ -84,14 +86,21 @@ public class AuthenticationController {
     }
 
     @PostMapping("token")
-    public String authenticateAndGetToken(@RequestBody LoginDto loginDto) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.getUsername(), loginDto.getPassword()
-        ));
-        if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(myUserDetailsService.loadUserByUsername(loginDto.getUsername()));
-        } else {
-            throw new UsernameNotFoundException("Credentials are invalid!");
+    public ResponseEntity<?> authenticateAndGetToken(@RequestBody LoginDto loginDto) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
+            );
+
+            if (authentication.isAuthenticated()) {
+                String jwtToken = jwtService.generateToken(myUserDetailsService.loadUserByUsername(loginDto.getUsername()));
+
+                return ResponseEntity.ok().body(Map.of("token", jwtToken));
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credentials are invalid!");
+            }
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
 }

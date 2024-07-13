@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ViewController {
 
-    @GetMapping("/registerpage")
+    @GetMapping("/register")
     public String showRegistrationForm()
     {
         return "register";
@@ -19,6 +19,9 @@ public class ViewController {
 
     @GetMapping("/login")
     public String showLoginForm(){ return "login";}
+
+    @GetMapping("/aboutus")
+    public String showAboutUsPage(){return "aboutus";}
 
     @GetMapping("/user/home")
     public String showUserHome(){return "userhome";}
