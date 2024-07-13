@@ -63,7 +63,7 @@ public class JWTService {
         Claims claims = getClaims(jwt);
         if (claims == null) {
             logger.warning("Failed to parse claims from JWT.");
-            return null; // Or handle the error case
+            return null;
         }
 
         String username = claims.getSubject();

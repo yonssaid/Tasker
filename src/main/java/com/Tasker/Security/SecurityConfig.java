@@ -43,7 +43,10 @@
                         registry.anyRequest().authenticated();
                     })
                     .formLogin(httpSecurityFormLoginConfigurer -> {
-                            httpSecurityFormLoginConfigurer.loginPage("/login").permitAll();
+                            httpSecurityFormLoginConfigurer
+                                    .loginPage("/login")
+                                    .successHandler(new AuthenticationSuccessHandler())
+                                    .permitAll();
                     })
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();

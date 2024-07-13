@@ -59,11 +59,11 @@
         }
 
         nav ul li {
-            margin: 0 5px; /* Adjusted margin */
+            margin: 0 5px;
         }
 
         nav ul li:last-child {
-            margin-right: 20px; /* Larger margin for the last item */
+            margin-right: 20px;
         }
 
         nav ul li.signup {
@@ -74,13 +74,13 @@
             content: '';
             position: absolute;
             width: calc(100% + 20px);
-            height: 140%; /* Increased height */
-            top: -10%; /* Adjusted top position */
+            height: 140%;
+            top: -10%;
             left: -10px;
             background-color: #1f66e5;
             border-radius: 20px;
             z-index: -1;
-            transform: scaleY(0.8); /* Adjust the curve effect */
+            transform: scaleY(0.8);
             transition: transform 0.3s;
         }
 
@@ -90,9 +90,9 @@
 
         nav ul li a {
             text-decoration: none;
-            color: #555; /* Changed default color */
+            color: #555;
             font-weight: 600;
-            padding: 10px 15px; /* Adjusted padding */
+            padding: 10px 15px;
             transition: color 0.3s;
             position: relative;
             z-index: 1;
@@ -109,8 +109,8 @@
         main {
             display: flex;
             min-height: 80vh;
-            margin-top: 80px; /* Adjusted to account for fixed nav */
-            background-color: #fff; /* Changed background color */
+            margin-top: 80px;
+            background-color: #fff;
             align-items: center;
             justify-content: center;
         }
@@ -178,7 +178,7 @@
             padding: 10px;
             text-align: center;
             font-size: 14px;
-            margin-top: 20px; /* Adjusted margin */
+            margin-top: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -221,9 +221,9 @@
 <main>
     <div class="login-form">
         <h2>Login to Tasker</h2>
-        <form id="loginForm">
-            <input type="text" id="username" name="username" placeholder="Username" required><br>
-            <input type="password" id="password" name="password" placeholder="Password" required><br>
+        <form id="loginForm" action="/login" method="post">
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
             <button type="submit">Login</button>
         </form>
         <div class="register-link">
@@ -242,27 +242,27 @@
 </footer>
 
 <script>
-    document.getElementById('loginForm').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
 
-        const response = await fetch('/api/auth/token', {
+        const username = event.target.username.value;
+        const password = event.target.password.value;
+
+        fetch('/api/auth/token', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password })
-        });
+            body: JSON.stringify({ username: username, password: password })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    localStorage.setItem('jwtToken', data.token);
+                } else {
+                    alert('Login failed. Please check your credentials.');
+                }
+            })
 
-        if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem('token', data.token);
-            window.location.href = '/user/home';
-        } else {
-            const errorMessage = await response.text();
-            console.error(errorMessage);
-        }
     });
 </script>
 
