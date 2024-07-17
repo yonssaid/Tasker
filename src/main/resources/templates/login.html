@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login to Tasker</title>
@@ -221,7 +222,7 @@
 <main>
     <div class="login-form">
         <h2>Login to Tasker</h2>
-        <form id="loginForm" action="/login" method="post">
+        <form id="loginForm">
             <input type="text" name="username" placeholder="Username" required><br>
             <input type="password" name="password" placeholder="Password" required><br>
             <button type="submit">Login</button>
@@ -243,11 +244,12 @@
 
 <script>
     document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
 
         const username = event.target.username.value;
         const password = event.target.password.value;
 
-        fetch('/api/auth/token', {
+        fetch('/api/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -256,13 +258,18 @@
         })
             .then(response => response.json())
             .then(data => {
-                if (data.token) {
-                    localStorage.setItem('jwtToken', data.token);
+                if (data.redirectUrl) {
+                    window.location.href = data.redirectUrl;
                 } else {
-                    alert('Login failed. Please check your credentials.');
+                    return response.json().then(data => {
+                        alert('Login failed: ' + data.message);
+                    });
                 }
             })
-
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred during login. Please try again.');
+            });
     });
 </script>
 

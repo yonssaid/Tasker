@@ -25,4 +25,7 @@ public class ViewController {
 
     @GetMapping("/user/home")
     public String showUserHome(){return "userhome";}
+
+    @GetMapping("/admin/home")
+    public String showAdminHome(){return "adminhome";}
 }

@@ -11,6 +11,7 @@
     import org.springframework.security.config.annotation.web.builders.HttpSecurity;
     import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
     import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+    import org.springframework.security.config.http.SessionCreationPolicy;
     import org.springframework.security.core.userdetails.UserDetailsService;
     import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
     import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,18 +36,21 @@
             logger.info("Configuring security filter chain");
             return httpSecurity
                     .csrf(AbstractHttpConfigurer::disable)
+                    .formLogin(AbstractHttpConfigurer::disable)
+                    .httpBasic(AbstractHttpConfigurer::disable)
+                    .sessionManagement(session -> session
+                            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(registry -> {
                         authenticationProvider();
-                        registry.requestMatchers("/api/auth/**", "/register", "/", "/img/**", "/vid/**", "/aboutus").permitAll();
-                        registry.requestMatchers("/admin/**").hasRole("ADMIN");
-                        registry.requestMatchers("/api/users/**", "/user/home", "/api/tasks/**").hasAnyRole("USER","ADMIN");
+                        registry.requestMatchers("/api/auth/**", "/register", "/", "/img/**", "/vid/**", "/aboutus", "/login", "/favicon.ico").permitAll();
+                        registry.requestMatchers("/admin/**", "/admin/home").hasRole("ADMIN");
+                        registry.requestMatchers("/api/users/**", "/api/tasks/**", "/user/home").hasAnyRole("USER","ADMIN");
                         registry.anyRequest().authenticated();
                     })
-                    .formLogin(httpSecurityFormLoginConfigurer -> {
-                            httpSecurityFormLoginConfigurer
-                                    .loginPage("/login")
-                                    .successHandler(new AuthenticationSuccessHandler())
-                                    .permitAll();
+                    .logout(logout -> {
+                        logout
+                                .logoutUrl("/logout")
+                                .clearAuthentication(true);
                     })
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                     .build();

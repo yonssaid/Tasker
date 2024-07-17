@@ -6,20 +6,23 @@ import com.Tasker.Models.MyUser;
 import com.Tasker.Models.Role;
 import com.Tasker.Repositories.RoleRepository;
 import com.Tasker.Repositories.UserRepository;
-import com.Tasker.Security.JWTService;
+import com.Tasker.Services.JWTService;
 import com.Tasker.Security.MyUserDetailsService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
@@ -50,16 +53,16 @@ public class AuthenticationController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @PostMapping("/logout")
+    public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie cookie = new Cookie("jwtToken", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
 
-    @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDto.getUsername(),
-                        loginDto.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User login successful", HttpStatus.OK);
 
+        return new ModelAndView("redirect:/login");
     }
 
     @PostMapping("register")
@@ -85,22 +88,34 @@ public class AuthenticationController {
         return new ResponseEntity<>("User has been registered successfully!", HttpStatus.OK);
     }
 
-    @PostMapping("token")
-    public ResponseEntity<?> authenticateAndGetToken(@RequestBody LoginDto loginDto) {
+    @PostMapping("/login")
+    public ResponseEntity<?> authenticateAndGetToken(@RequestBody LoginDto loginDto, HttpServletResponse response) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword())
             );
 
-            if (authentication.isAuthenticated()) {
-                String jwtToken = jwtService.generateToken(myUserDetailsService.loadUserByUsername(loginDto.getUsername()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String jwtToken = jwtService.generateToken(userDetails);
 
-                return ResponseEntity.ok().body(Map.of("token", jwtToken));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credentials are invalid!");
-            }
+            Cookie cookie = new Cookie("jwtToken", jwtToken);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true);
+            cookie.setPath("/");
+            cookie.setMaxAge(24 * 60 * 60);
+
+            response.addCookie(cookie);
+
+            boolean isAdmin = authentication.getAuthorities().stream()
+                    .anyMatch(g -> g.getAuthority().equals("ROLE_ADMIN"));
+            String redirectUrl = isAdmin ? "/admin/home" : "/user/home";
+
+            return ResponseEntity.ok().body(Map.of("message", "Login successful!", "redirectUrl", redirectUrl));
+
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
-}
+    }
+

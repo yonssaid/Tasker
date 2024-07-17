@@ -1,6 +1,6 @@
 package com.Tasker;
 
-import com.Tasker.Security.JWTService;
+import com.Tasker.Services.JWTService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.junit.jupiter.api.BeforeEach;
