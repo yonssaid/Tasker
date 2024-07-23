@@ -281,9 +281,11 @@
 
 <script>
     document.getElementById('registerForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
+        event.preventDefault();
 
         const formData = new FormData(this);
+        const username = formData.get('username');
+        const password = formData.get('password');
 
         fetch('/api/auth/register', {
             method: 'POST',
@@ -294,8 +296,26 @@
         })
         .then(response => {
             if (response.ok) {
-                window.location.href = '/user/home'; // Redirect to user's home page on success
-            } else {
+              fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, password: password })
+              })
+                      .then(response => response.json())
+                      .then(data => {
+                        if (data.redirectUrl) {
+                          window.location.href = '/user/home';
+                        } else {
+                          return response.json().then(data => {
+                            alert('Login failed: ' + data.message);
+                          });
+                        }
+
+            })
+            }
+            else {
                 return response.text().then(text => { throw new Error(text) });
             }
         })

@@ -42,9 +42,9 @@
                             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(registry -> {
                         authenticationProvider();
-                        registry.requestMatchers("/api/auth/**", "/register", "/", "/img/**", "/vid/**", "/aboutus", "/login", "/favicon.ico").permitAll();
+                        registry.requestMatchers("/api/auth/**", "/register", "/", "/img/**", "/vid/**", "/aboutus", "/login", "/favicon.ico", "/error").permitAll();
                         registry.requestMatchers("/admin/**", "/admin/home").hasRole("ADMIN");
-                        registry.requestMatchers("/api/users/**", "/api/tasks/**", "/user/home").hasAnyRole("USER","ADMIN");
+                        registry.requestMatchers("/api/users/**", "/api/tasks/**","/api/categories/**" ,"/user/home", "/api/taskcategories/**").hasAnyRole("USER","ADMIN");
                         registry.anyRequest().authenticated();
                     })
                     .logout(logout -> {

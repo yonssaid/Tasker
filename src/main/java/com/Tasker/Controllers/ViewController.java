@@ -24,7 +24,7 @@ public class ViewController {
     public String showAboutUsPage(){return "aboutus";}
 
     @GetMapping("/user/home")
-    public String showUserHome(){return "userhome";}
+    public String showUserHome(){return "forward:/userhome2.html";}
 
     @GetMapping("/admin/home")
     public String showAdminHome(){return "adminhome";}

@@ -27,11 +27,6 @@ public class Task {
     @Column(name = "deadline")
     private LocalDate deadline;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "assigned_to")
-    private MyUser assignedTo;
-
-
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private MyUser user;
@@ -68,10 +63,6 @@ public class Task {
     public void setDeadline(LocalDate deadline) {this.deadline = deadline;}
 
     public LocalDate getDeadline() {return deadline;}
-
-    public void setAssignedTo(MyUser assignedTo) {this.assignedTo = assignedTo;}
-
-    public MyUser getAssignedTo() {return assignedTo;}
 
     public void setCategories(Set categories) {this.categories = categories;}
 
