@@ -1,0 +1,41 @@
+.task-table {
+    width: 110%;
+    border-collapse: collapse;
+    margin-left: -170px;
+}
+
+.task-table th,
+.task-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+.task-table th {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    font-weight: 600;
+}
+
+.task-table td button {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    text-transform: capitalize;
+    width: 100px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.task-table td button.ongoing {
+    background-color: #ff9800;
+}
+
+.task-table td button.completed {
+    background-color: #4caf50;
+}
+
+.task-table td button.missed {
+    background-color: #f44336;
+}
