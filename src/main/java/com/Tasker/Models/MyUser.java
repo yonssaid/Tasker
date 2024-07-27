@@ -4,16 +4,13 @@ import jakarta.persistence.*;
 
 /**
  * Represents a user in the system.
+ *
+ * <p>
  * This class maps to the "users" table in the database and contains user-related information
  * such as username, password, email, and role.
+ *</p>
  *
- * <p>Usage example:</p>
- * <pre>
- *     MyUser user = new MyUser("username", "password", "email@example.com", role);
- * </pre>
- *
- * @author Your Name
- * @version 1.0
+ * @author Yons Said
  */
 @Entity
 @Table(name = "users")

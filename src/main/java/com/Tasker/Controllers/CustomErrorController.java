@@ -7,10 +7,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * Controller for handling custom error pages.
+ *
+ * @author Yons Said
+ */
 @Controller
 public class CustomErrorController implements ErrorController {
+
     private static final String PATH = "/error";
 
+    /**
+     * Handles errors and returns the appropriate error page based on the status code.
+     *
+     * @param request the HttpServletRequest object.
+     * @return the name of the error view.
+     */
     @RequestMapping(PATH)
     public String handleError(HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
@@ -31,7 +43,12 @@ public class CustomErrorController implements ErrorController {
         return "error/500";
     }
 
+    /**
+     * Returns the error path.
+     *
+     * @return the error path.
+     */
     public String getErrorPath() {
-        return "/error";
+        return PATH;
     }
 }

@@ -15,6 +15,14 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+/**
+ * Service class for managing JWT (JSON Web Token) operations.
+ * <p>
+ * This service handles the creation, validation, and parsing of JWT tokens.
+ * </p>
+ *
+ * @author Yons Said
+ */
 @Service
 public class JWTService {
 
@@ -22,6 +30,11 @@ public class JWTService {
     private static final String secretkey = "17ED437C3814863F6A77BF729797F55784E8A25119CBF9E4CDECBD3984FFF07C";
     private static final long validTimeLength = TimeUnit.DAYS.toMillis(1);
 
+    /**
+     * Generates a SecretKey for signing JWT tokens.
+     *
+     * @return the generated SecretKey.
+     */
     public SecretKey generateKey() {
         logger.info("Generating secret key...");
 
@@ -33,6 +46,12 @@ public class JWTService {
         return key;
     }
 
+    /**
+     * Generates a JWT token for the given user details.
+     *
+     * @param userDetails the user details for which the token is generated.
+     * @return the generated JWT token.
+     */
     public String generateToken(UserDetails userDetails) {
         logger.info("Generating JWT token for user: " + userDetails.getUsername());
 
@@ -47,18 +66,24 @@ public class JWTService {
                 .signWith(generateKey())
                 .compact();
 
-        logger.info("JWT token generated successfully." );
+        logger.info("JWT token generated successfully.");
 
         return token;
     }
 
+    /**
+     * Extracts the username from the given JWT token.
+     *
+     * @param jwt the JWT token from which the username is extracted.
+     * @return the extracted username, or null if the token is invalid.
+     */
     public String extractUsername(String jwt) {
         if (jwt == null || jwt.isEmpty()) {
             logger.warning("JWT is null or empty. Cannot extract username.");
             return null;
         }
 
-        logger.info("Extracting username from JWT. JWT: " + jwt);
+        logger.info("Extracting username from JWT.");
 
         Claims claims = getClaims(jwt);
         if (claims == null) {
@@ -73,9 +98,14 @@ public class JWTService {
         return username;
     }
 
-
+    /**
+     * Parses the JWT token and retrieves the claims.
+     *
+     * @param jwt the JWT token to be parsed.
+     * @return the claims extracted from the JWT token.
+     */
     private Claims getClaims(String jwt) {
-        logger.info("Parsing JWT and retrieving claims. JWT: " + jwt);
+        logger.info("Parsing JWT and retrieving claims.");
 
         Claims claims = Jwts.parser()
                 .verifyWith(generateKey())
@@ -88,8 +118,14 @@ public class JWTService {
         return claims;
     }
 
+    /**
+     * Validates the given JWT token.
+     *
+     * @param jwt the JWT token to be validated.
+     * @return true if the token is valid, false otherwise.
+     */
     public boolean isTokenValid(String jwt) {
-        logger.info("Validating JWT token. JWT: " + jwt);
+        logger.info("Validating JWT token.");
 
         Claims claims = getClaims(jwt);
         boolean isValid = claims.getExpiration().after(Date.from(Instant.now()));

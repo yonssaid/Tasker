@@ -26,33 +26,52 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Map;
 
-
+/**
+ * REST controller for authentication-related endpoints.
+ *
+ * @author Yons Said
+ */
 @RestController
 @RequestMapping("/api/auth/")
 public class AuthenticationController {
 
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JWTService jwtService;
+    private final MyUserDetailsService myUserDetailsService;
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private JWTService jwtService;
-    @Autowired
-    private MyUserDetailsService myUserDetailsService;
-
-
+    /**
+     * Constructs an AuthenticationController with the specified dependencies.
+     *
+     * @param authenticationManager the manager responsible for authenticating users.
+     * @param userRepository the repository to perform CRUD operations on users.
+     * @param roleRepository the repository to perform CRUD operations on roles.
+     * @param passwordEncoder the encoder to handle password encoding.
+     * @param jwtService the service for handling JWT operations.
+     * @param myUserDetailsService the service to load user-specific data.
+     */
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository,
-                                    RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+                                    RoleRepository roleRepository, PasswordEncoder passwordEncoder,
+                                    JWTService jwtService, MyUserDetailsService myUserDetailsService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.myUserDetailsService = myUserDetailsService;
     }
 
+
+    /**
+     * Handles user logout by clearing the JWT token cookie.
+     *
+     * @param request  the HttpServletRequest object.
+     * @param response the HttpServletResponse object.
+     * @return a ModelAndView object redirecting to the login page.
+     */
     @PostMapping("/logout")
     public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
         Cookie cookie = new Cookie("jwtToken", null);
@@ -60,11 +79,15 @@ public class AuthenticationController {
         cookie.setHttpOnly(true);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
-
-
         return new ModelAndView("redirect:/login");
     }
 
+    /**
+     * Registers a new user.
+     *
+     * @param registerDto the data transfer object containing user registration details.
+     * @return a ResponseEntity containing a success message or an error message if the username is taken.
+     */
     @PostMapping("register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
         if (userRepository.existsByUsername(registerDto.getUsername())) {
@@ -88,6 +111,13 @@ public class AuthenticationController {
         return new ResponseEntity<>("User has been registered successfully!", HttpStatus.OK);
     }
 
+    /**
+     * Authenticates a user and returns a JWT token.
+     *
+     * @param loginDto  the data transfer object containing login details.
+     * @param response the HttpServletResponse object.
+     * @return a ResponseEntity containing a success message, JWT token, and redirect URL, or an error message if authentication fails.
+     */
     @PostMapping("/login")
     public ResponseEntity<?> authenticateAndGetToken(@RequestBody LoginDto loginDto, HttpServletResponse response) {
         try {
@@ -117,5 +147,4 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
-    }
-
+}

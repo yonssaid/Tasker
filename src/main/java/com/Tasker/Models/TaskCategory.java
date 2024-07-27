@@ -2,6 +2,15 @@ package com.Tasker.Models;
 
 import jakarta.persistence.*;
 
+/**
+ * Represents the association between a task and a category.
+ * <p>
+ * The TaskCategory entity maps the many-to-many relationship between tasks and categories,
+ * allowing a task to belong to multiple categories and a category to contain multiple tasks.
+ * </p>
+ *
+ * @author Yons Said
+ */
 @Entity
 @Table(name = "task_category")
 public class TaskCategory {
@@ -19,16 +28,57 @@ public class TaskCategory {
     @JoinColumn(name = "category_id", referencedColumnName = "category_id")
     private Category category;
 
-    public void setId(Long id) {this.id = id;}
+    /**
+     * Sets the ID of the task-category association.
+     *
+     * @param id the task-category ID
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-    public Long getId() {return id;}
+    /**
+     * Returns the ID of the task-category association.
+     *
+     * @return the task-category ID
+     */
+    public Long getId() {
+        return id;
+    }
 
-    public void setCategory(Category category) {this.category = category;}
+    /**
+     * Sets the category in the task-category association.
+     *
+     * @param category the category
+     */
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
-    public Category getCategory() {return category;}
+    /**
+     * Returns the category in the task-category association.
+     *
+     * @return the category
+     */
+    public Category getCategory() {
+        return category;
+    }
 
-    public void setTask(Task task) {this.task = task;}
+    /**
+     * Sets the task in the task-category association.
+     *
+     * @param task the task
+     */
+    public void setTask(Task task) {
+        this.task = task;
+    }
 
-    public Task getTask() {return task;}
+    /**
+     * Returns the task in the task-category association.
+     *
+     * @return the task
+     */
+    public Task getTask() {
+        return task;
+    }
 }
-
