@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../css/Sidebar.css';
 import { FaHome, FaCalendarAlt, FaCog, FaSignOutAlt } from 'react-icons/fa';
 import ProfilePic from '../../assets/profile-pic.jpg';
 
 function Sidebar({ logout }) {
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+    const navigate = useNavigate();
 
     const toggleProfileMenu = () => {
         setProfileMenuOpen(!profileMenuOpen);
+    };
+
+    const navigateTo = (path) => {
+        navigate(path);
     };
 
     return (
@@ -15,10 +21,10 @@ function Sidebar({ logout }) {
             <div className="logo">
                 <img src="/images/Tasker_Logo.png" alt="Tasker Logo" />
             </div>
-            <div className="nav-item">
+            <div className="nav-item" onClick={() => navigateTo('/')}>
                 <FaHome className="nav-icon" />
             </div>
-            <div className="nav-item">
+            <div className="nav-item" onClick={() => navigateTo('/calendar')}>
                 <FaCalendarAlt className="nav-icon" />
             </div>
             <div className="profile-section" onClick={toggleProfileMenu}>

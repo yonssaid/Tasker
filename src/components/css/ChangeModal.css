@@ -1,0 +1,162 @@
+/* Modal Overlay */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Modal Content */
+.modal-content {
+    background: linear-gradient(135deg, #1e1e1e, #3e3e3e);
+    color: #f1f1f1;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    margin: 10% auto;
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+    animation: slide-down 0.4s ease-out;
+}
+
+@keyframes slide-down {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #555;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.modal-close {
+    color: #555;
+    font-size: 32px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+    color: #1e1e1e;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 20px 0;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-container input,
+.input-container select {
+    padding: 12px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background-color: #2a2a2a;
+    color: #fff;
+    font-size: 16px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-container input:focus,
+.input-container select:focus {
+    border-color: #2196f3;
+    box-shadow: 0 4px 8px rgba(0, 150, 255, 0.5);
+}
+
+/* Modal Footer */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 20px;
+    border-top: 1px solid #555;
+    margin-top: 20px;
+}
+
+/* Action Buttons */
+.modal-actions button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.save-button {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+    color: #fff;
+}
+
+.save-button:hover {
+    background: linear-gradient(135deg, #45a049, #4caf50);
+    transform: translateY(-2px);
+}
+
+.save-button:active {
+    transform: translateY(0);
+}
+
+.edit-button {
+    background: linear-gradient(135deg, #ff9800, #fb8c00);
+    color: #fff;
+}
+
+.edit-button:hover {
+    background: linear-gradient(135deg, #fb8c00, #ff9800);
+    transform: translateY(-2px);
+}
+
+.edit-button:active {
+    transform: translateY(0);
+}
+
+.delete-button {
+    background: linear-gradient(135deg, #f44336, #e53935);
+    color: #fff;
+}
+
+.delete-button:hover {
+    background: linear-gradient(135deg, #e53935, #f44336);
+    transform: translateY(-2px);
+}
+
+.delete-button:active {
+    transform: translateY(0);
+}

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Sidebar from './components/js/Sidebar';
-import Modal from './components/js/Modal';
+import CreationModal from './components/js/CreationModal';
 import TaskBoard from './components/js/TaskBoard';
 import TaskTable from './components/js/TaskTable';
+import CalendarView from './components/js/CalendarView';
 import axios from 'axios';
 
 function App() {
@@ -11,17 +13,14 @@ function App() {
   const [modalVisible, setModalVisible] = useState(false);
   const [categories, setCategories] = useState([]);
 
-  // Handle user logout
   const logout = async () => {
     await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
     window.location.href = '/login';
   };
 
-  // Open and close modal
   const openModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
 
-  // Create a new task and link it to a category
   const createTask = async (taskData, categoryId) => {
     try {
       const taskResponse = await axios.post('/api/tasks/create', taskData);
@@ -40,7 +39,6 @@ function App() {
     }
   };
 
-  // Toggle the status of a task
   const toggleStatus = (taskId) => {
     setTasks(prevTasks =>
         prevTasks.map(task =>
@@ -51,36 +49,51 @@ function App() {
     );
   };
 
-  // Fetch categories from the server
   const fetchCategories = async () => {
     try {
       const response = await axios.get('/api/categories/getAll');
-      setCategories(response.data);
+      const data = response.data.map(category => {
+        try {
+          const parsedName = JSON.parse(category.name);
+          return { ...category, name: parsedName.name || category.name };
+        } catch {
+          return category;
+        }
+      });
+      setCategories(data);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
   };
 
-  // Fetch categories on component mount
   useEffect(() => {
     fetchCategories();
   }, []);
 
   return (
-      <div className="App">
-        <Sidebar logout={logout} />
-        <main className="main-content">
-          <TaskBoard openModal={openModal} />
-          <TaskTable tasks={tasks} toggleStatus={toggleStatus} />
-          <Modal
-              show={modalVisible}
-              closeModal={closeModal}
-              createTask={createTask}
-              categories={categories}
-              fetchCategories={fetchCategories}
-          />
-        </main>
-      </div>
+      <Router>
+        <div className="App">
+          <Sidebar logout={logout} />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={
+                <>
+                  <TaskBoard openModal={openModal} />
+                  <TaskTable tasks={tasks} toggleStatus={toggleStatus} />
+                  <CreationModal
+                      show={modalVisible}
+                      closeModal={closeModal}
+                      createTask={createTask}
+                      categories={categories}
+                      fetchCategories={fetchCategories}
+                  />
+                </>
+              } />
+              <Route path="/calendar" element={<CalendarView />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
   );
 }
 

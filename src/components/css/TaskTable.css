@@ -1,41 +1,81 @@
-.task-table {
-    width: 110%;
+/* Task Table Container */
+.task-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    position: relative;
+}
+
+/* Task Grid */
+.task-grid {
+    display: grid;
+    width: 85%;
     border-collapse: collapse;
-    margin-left: -170px;
+    grid-template-columns: repeat(5, 1fr);
 }
 
-.task-table th,
-.task-table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #444;
+/* Task Grid Header */
+.task-grid-header {
+    display: contents;
 }
 
-.task-table th {
+.task-grid-header > div {
     background-color: #1e1e1e;
-    color: #e0e0e0;
-    font-weight: 600;
+    color: #fff;
+    padding: 12px;
+    border-bottom: 1px solid #555;
+    text-align: center;
+    font-weight: bold;
 }
 
-.task-table td button {
+/* Task Grid Row */
+.task-grid-row {
+    display: contents;
+}
+
+.task-grid-row > div {
+    padding: 12px;
+    border-bottom: 1px solid #555;
+    text-align: center;
+    color: #ccc;
+}
+
+.task-grid-row > div.task-title {
+    font-weight: bold;
+    color: #ccc;
     cursor: pointer;
-    padding: 5px 10px;
-    border: none;
+}
+
+.task-grid-row > div.task-title:hover {
+    color: #2196f3;
+    text-decoration: underline;
+}
+
+
+/* Task Sort Icons */
+.task-sort-icons {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    width: 15%;
+    position: relative;
+    top: 5px;
+    right: 40px;
+}
+
+.task-sort-icons > svg {
+    color: #e0e0e0;
+    background-color: #1e1e1e;
+    padding: 5px;
+    margin: 0 5px;
     border-radius: 5px;
-    text-transform: capitalize;
-    width: 100px;
-    font-size: 14px;
-    color: #ffffff;
+    cursor: pointer;
+    font-size: 20px;
+    transition: background-color 0.3s ease;
 }
 
-.task-table td button.ongoing {
-    background-color: #ff9800;
-}
-
-.task-table td button.completed {
-    background-color: #4caf50;
-}
-
-.task-table td button.missed {
-    background-color: #f44336;
+.task-sort-icons > svg:hover {
+    background-color: #444;
 }

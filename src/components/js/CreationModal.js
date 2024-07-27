@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../css/Modal.css';
+import '../css/CreationModal.css';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-const Modal = ({ show, closeModal, createTask, categories = [], fetchCategories }) => {
+const CreationModal = ({ show, closeModal, createTask, categories = [], fetchCategories }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [deadline, setDeadline] = useState(new Date());
@@ -134,7 +134,7 @@ const Modal = ({ show, closeModal, createTask, categories = [], fetchCategories 
     );
 };
 
-Modal.propTypes = {
+CreationModal.propTypes = {
     show: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
     createTask: PropTypes.func.isRequired,
@@ -142,4 +142,4 @@ Modal.propTypes = {
     fetchCategories: PropTypes.func.isRequired,
 };
 
-export default Modal;
+export default CreationModal;
