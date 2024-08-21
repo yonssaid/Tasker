@@ -60,18 +60,40 @@
     }
 
     nav ul li {
-      margin: 0 5px; /* Adjusted margin */
+      margin: 0 5px;
     }
 
     nav ul li:last-child {
-      margin-right: 20px; /* Larger margin for the last item */
+      margin-right: 25px;
+    }
+
+    nav ul li.signup {
+      position: relative;
+    }
+
+    nav ul li.signup::before {
+      content: '';
+      position: absolute;
+      width: calc(100% + 20px);
+      height: 140%;
+      top: -10%;
+      left: -10px;
+      background-color: #1f66e5;
+      border-radius: 20px;
+      z-index: -1;
+      transform: scaleY(0.8);
+      transition: transform 0.3s;
+    }
+
+    nav ul li.signup:hover::before {
+      transform: scaleY(1);
     }
 
     nav ul li a {
       text-decoration: none;
-      color: #555; /* Changed default color */
+      color: #555;
       font-weight: 600;
-      padding: 10px 15px; /* Adjusted padding */
+      padding: 10px 15px;
       transition: color 0.3s;
       position: relative;
       z-index: 1;
@@ -85,10 +107,47 @@
       color: #fff;
     }
 
+
+    nav ul li.dashboard {
+      position: relative;
+    }
+
+    nav ul li.dashboard::before {
+      content: '';
+      position: absolute;
+      width: calc(100% + 10px);
+      height: 140%;
+      top: -15%;
+      left: -5px;
+      background-color: #1f66e5;
+      border-radius: 20px;
+      z-index: -1;
+      transform: scaleY(0.8);
+      transition: transform 0.3s;
+      align-items: center;
+      justify-content: center;
+    }
+
+    nav ul li.dashboard:hover::before {
+      transform: scaleY(1);
+    }
+
+    nav ul li.dashboard a {
+      color: #fff;
+      font-weight: 600;
+      padding: 10px 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    nav ul li.dashboard a:hover {
+      color: #fff;
+    }
+
     main {
       min-height: 80vh;
-      margin-top: 80px; /* Adjusted to account for fixed nav */
-      background-color: #fff; /* Changed background color */
+      margin-top: 80px;
+      background-color: #fff;
       padding: 20px;
       text-align: left;
     }
@@ -99,7 +158,7 @@
       padding: 10px;
       text-align: center;
       font-size: 14px;
-      margin-top: 20px; /* Adjusted margin */
+      margin-top: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -119,7 +178,7 @@
     }
 
     .social-icons a:hover {
-      color: #6a11cb;
+      color: #004285;
     }
   </style>
 </head>
@@ -131,21 +190,24 @@
       <span>TASKER</span>
     </a>
   </div>
-  <ul>
+  <ul id="nav-links">
     <li><a href="/features">Features</a></li>
     <li><a href="/aboutus">About Us</a></li>
     <li><a href="/contact">Contact</a></li>
-    <li class="signup"><a href="/register">Signup</a></li>
-    <li><a href="/login">Login</a></li>
+    <li id="signup-link" class="signup"><a href="/register">Signup</a></li>
+    <li id="login-link"><a href="/login">Login</a></li>
   </ul>
 </nav>
 <main>
-  <h2>About Us</h2>
+  <h1>About Us</h1>
   <p>Hey there! Welcome to Tasker</p>
   <p>Tasker is a project born out of my own experience as a busy college student trying to juggle classes, assignments, and personal projects. I wanted a simple, effective tool to help me stay organized and keep track of everything I needed to do. So, I decided to create Tasker, a task management app that’s all about making life a little bit easier.</p>
 
   <h3>The Story Behind Tasker</h3>
   <p>Hi, I'm Yons Said, a 20-year-old college student with a passion for coding and problem-solving. I started Tasker because I needed a better way to manage my own tasks and thought, "Hey, maybe others do too!" What began as a small personal project quickly grew into something more as I added features and fine-tuned the app.</p>
+
+  <h3>About Me</h3>
+  <p>I’m Yons Said, a 20-year-old college student with a love for coding and creating useful things. When I’m not working on Tasker, I’m usually busy with school, hanging out with friends, or diving into new tech projects. Tasker is my way of sharing something helpful with others while honing my own skills.</p>
 
   <h3>The Journey</h3>
   <p>Building Tasker has been a mix of challenges and victories. Here’s how it all went down:</p>
@@ -163,17 +225,65 @@
     <li><strong>Better Insights:</strong> Adding features to help you track your productivity.</li>
   </ul>
 
-  <h3>About Me</h3>
-  <p>I’m Yons Said, a 20-year-old college student with a love for coding and creating useful things. When I’m not working on Tasker, I’m usually busy with school, hanging out with friends, or diving into new tech projects. Tasker is my way of sharing something helpful with others while honing my own skills.</p>
-</main>
+  </main>
 <footer>
   <div class="social-icons">
     <a href="#"><i class="fab fa-facebook-f"></i></a>
     <a href="#"><i class="fab fa-twitter"></i></a>
-    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+    <a href="https://www.linkedin.com/in/yonssaid/"><i class="fab fa-linkedin-in"></i></a>
     <a href="#"><i class="fab fa-instagram"></i></a>
   </div>
   <p>&copy; 2024 Tasker. All rights reserved.</p>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('/api/auth/isAuth', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+              .then(response => response.json())
+              .then(data => {
+                if (data.authenticated) {
+                  document.getElementById('signup-link').style.display = 'none';
+                  document.getElementById('login-link').style.display = 'none';
+
+                  const dashboardLink = document.createElement('li');
+                  dashboardLink.classList.add('dashboard');
+                  dashboardLink.innerHTML = '<a href="/user/home">Dashboard</a>';
+
+                  document.getElementById('nav-links').appendChild(dashboardLink);
+                }
+
+                const logoutLink = document.createElement('li');
+                logoutLink.classList.add('logout');
+                logoutLink.innerHTML = '<a href="#">Logout</a>';
+
+
+                logoutLink.addEventListener('click', function() {
+                  fetch('/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  })
+                          .then(() => {
+                            window.location.href = '/';
+                          })
+                          .catch(error => {
+                            console.error('Error during logout:', error);
+                          });
+                });
+
+
+                document.getElementById('nav-links').appendChild(logoutLink);
+
+              })
+              .catch(error => {
+                console.error('Error checking authentication:', error);
+              });
+    });
+  </script>
 </footer>
 </body>
 </html>

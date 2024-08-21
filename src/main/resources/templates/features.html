@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - Tasker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        nav .logo a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #333;
+        }
+
+        nav .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        nav .logo span {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 5px;
+        }
+
+        nav ul li:last-child {
+            margin-right: 25px;
+        }
+
+        nav ul li.signup {
+            position: relative;
+        }
+
+        nav ul li.signup::before {
+            content: '';
+            position: absolute;
+            width: calc(100% + 20px);
+            height: 140%;
+            top: -10%;
+            left: -10px;
+            background-color: #1f66e5;
+            border-radius: 20px;
+            z-index: -1;
+            transform: scaleY(0.8);
+            transition: transform 0.3s;
+        }
+
+        nav ul li.signup:hover::before {
+            transform: scaleY(1);
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 600;
+            padding: 10px 15px;
+            transition: color 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav ul li a:hover {
+            color: #1f66e5;
+        }
+
+        nav ul li.signup a:hover {
+            color: #fff;
+        }
+
+
+        nav ul li.dashboard {
+            position: relative;
+        }
+
+        nav ul li.dashboard::before {
+            content: '';
+            position: absolute;
+            width: calc(100% + 10px);
+            height: 140%;
+            top: -15%;
+            left: -5px;
+            background-color: #1f66e5;
+            border-radius: 20px;
+            z-index: -1;
+            transform: scaleY(0.8);
+            transition: transform 0.3s;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav ul li.dashboard:hover::before {
+            transform: scaleY(1);
+        }
+
+        nav ul li.dashboard a {
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav ul li.dashboard a:hover {
+            color: #fff;
+        }
+
+        main {
+            padding: 100px 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 80px;
+        }
+
+        .feature:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .feature-content {
+            flex: 1;
+            padding: 80px 100px;
+        }
+
+        .feature-content h2 {
+            font-size: 42px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1f66e5;
+        }
+
+        .feature-content p {
+            font-size: 27px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .feature-media {
+            flex: 1;
+            padding: 80px 100px;
+            display: flex;
+            justify-content: center;
+
+        }
+
+        .feature-media img, .feature-media video {
+            width: 175%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .social-icons a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .social-icons a:hover {
+            color: #004285;
+        }
+
+    </style>
+</head>
+<body>
+<nav>
+    <div class="logo">
+        <a href="/">
+            <img src="/img/Tasker_Logo.png" alt="Tasker Logo">
+            <span>TASKER</span>
+        </a>
+    </div>
+    <ul id="nav-links">
+        <li><a href="/features">Features</a></li>
+        <li><a href="/aboutus">About Us</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li id="signup-link" class="signup"><a href="/register">Signup</a></li>
+        <li id="login-link"><a href="/login">Login</a></li>
+    </ul>
+</nav>
+<main>
+    <h1 style="font-size: 70px; font-weight: 700; color: #000000; text-align: center; margin-bottom: 35px;">Features</h1>
+    <section class="feature">
+        <div class="feature-content">
+            <h2>Easy and Intuitive Task Creation</h2>
+            <p>Create tasks effortlessly with our simple and intuitive interface designed to make task management a breeze.</p>
+        </div>
+        <div class="feature-media">
+            <video autoplay muted loop>
+                <source src="/vid/create.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </section>
+    <section class="feature">
+        <div class="feature-content">
+            <h2>Straightforward and Simple Task Editing and Deletion</h2>
+            <p>Edit or delete your tasks with just a few clicks, ensuring your task list is always up-to-date.</p>
+        </div>
+        <div class="feature-media">
+            <video autoplay muted loop>
+                <source src="/vid/editanddelete.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </section>
+
+    <section class="feature">
+        <div class="feature-content">
+            <h2>Dynamic Status Changing & Sorting</h2>
+            <p>Easily switch between to-do and completed tasks, and sort them by alphabetical order, date, or priority.</p>
+        </div>
+        <div class="feature-media">
+            <video autoplay muted loop>
+                <source src="/vid/statuschange.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </section>
+
+    <section class="feature">
+        <div class="feature-content">
+            <h2>Overdue Task Highlighting</h2>
+            <p>Never miss a deadline with our visual cue—tasks that are overdue are highlighted in red.</p>
+        </div>
+        <div class="feature-media">
+            <img src="/img/overdue.png" alt="Overdue Task Highlighting">
+        </div>
+    </section>
+</main>
+<footer>
+    <div class="social-icons">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.linkedin.com/in/yonssaid/"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+    <p>&copy; 2024 Tasker. All rights reserved.</p>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/auth/isAuth', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.authenticated) {
+                        document.getElementById('signup-link').style.display = 'none';
+                        document.getElementById('login-link').style.display = 'none';
+
+                        const dashboardLink = document.createElement('li');
+                        dashboardLink.classList.add('dashboard');
+                        dashboardLink.innerHTML = '<a href="/user/home">Dashboard</a>';
+
+                        document.getElementById('nav-links').appendChild(dashboardLink);
+
+
+                        const logoutLink = document.createElement('li');
+                        logoutLink.classList.add('logout');
+                        logoutLink.innerHTML = '<a href="#">Logout</a>';
+
+
+                        logoutLink.addEventListener('click', function() {
+                            fetch('/api/auth/logout', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                }
+                            })
+                                .then(() => {
+                                    window.location.href = '/';
+                                })
+                                .catch(error => {
+                                    console.error('Error during logout:', error);
+                                });
+                        });
+
+
+                        document.getElementById('nav-links').appendChild(logoutLink);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking authentication:', error);
+                });
+        });
+    </script>
+
+</footer>
+</body>
+</html>

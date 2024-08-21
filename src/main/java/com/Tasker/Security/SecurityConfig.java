@@ -1,5 +1,6 @@
 package com.Tasker.Security;
 
+import com.Tasker.Services.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -117,7 +118,9 @@ public class SecurityConfig {
                             "/api/categories/**",
                             "/user/home",
                             "/api/taskcategories/**",
-                            "/css/**"
+                            "/css/**",
+                            "/user/home/calendar",
+                            "/user/home/table"
                     ).hasAnyRole("USER", "ADMIN");
 
                     registry.anyRequest().authenticated();

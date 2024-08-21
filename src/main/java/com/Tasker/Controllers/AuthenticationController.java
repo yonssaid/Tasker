@@ -7,7 +7,7 @@ import com.Tasker.Models.Role;
 import com.Tasker.Repositories.RoleRepository;
 import com.Tasker.Repositories.UserRepository;
 import com.Tasker.Services.JWTService;
-import com.Tasker.Security.MyUserDetailsService;
+import com.Tasker.Services.MyUserDetailsService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -40,7 +40,6 @@ public class AuthenticationController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
-    private final MyUserDetailsService myUserDetailsService;
 
     /**
      * Constructs an AuthenticationController with the specified dependencies.
@@ -50,7 +49,6 @@ public class AuthenticationController {
      * @param roleRepository the repository to perform CRUD operations on roles.
      * @param passwordEncoder the encoder to handle password encoding.
      * @param jwtService the service for handling JWT operations.
-     * @param myUserDetailsService the service to load user-specific data.
      */
     @Autowired
     public AuthenticationController(AuthenticationManager authenticationManager, UserRepository userRepository,
@@ -61,26 +59,8 @@ public class AuthenticationController {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
-        this.myUserDetailsService = myUserDetailsService;
     }
 
-
-    /**
-     * Handles user logout by clearing the JWT token cookie.
-     *
-     * @param request  the HttpServletRequest object.
-     * @param response the HttpServletResponse object.
-     * @return a ModelAndView object redirecting to the login page.
-     */
-    @PostMapping("/logout")
-    public ModelAndView logout(HttpServletRequest request, HttpServletResponse response) {
-        Cookie cookie = new Cookie("jwtToken", null);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
-        return new ModelAndView("redirect:/login");
-    }
 
     /**
      * Registers a new user.
@@ -147,4 +127,46 @@ public class AuthenticationController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
     }
+
+    /**
+     * Handles user logout by clearing the JWT token cookie.
+     *
+     * @param response the HttpServletResponse object.
+     * @return a ModelAndView object redirecting to the login page.
+     */
+    @PostMapping("/logout")
+    public ModelAndView logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("jwtToken", null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return new ModelAndView("redirect:/login");
+    }
+
+    /**
+     * Checks if the user is authenticated by verifying the JWT token.
+     *
+     * @param request the HttpServletRequest object.
+     * @return a ResponseEntity containing a JSON object with the authentication status.
+     */
+    @GetMapping("/isAuth")
+    public ResponseEntity<Map<String, Boolean>> isAuthenticated(HttpServletRequest request) {
+        String jwtToken = null;
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwtToken".equals(cookie.getName())) {
+                    jwtToken = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        boolean isAuthenticated = jwtToken != null && jwtService.isTokenValid(jwtToken);
+
+        return ResponseEntity.ok(Map.of("authenticated", isAuthenticated));
+    }
+
 }

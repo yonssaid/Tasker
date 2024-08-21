@@ -1,6 +1,7 @@
 package com.Tasker.Security;
 
 import com.Tasker.Services.JWTService;
+import com.Tasker.Services.MyUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -30,21 +31,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = Logger.getLogger(JwtAuthenticationFilter.class.getName());
 
-    private final JWTService jwtService;
-
-    private final MyUserDetailsService myUserDetailsService;
-
-    /**
-     * Constructor for JwtAuthenticationFilter.
-     *
-     * @param jwtService the service to generate and return JWT information.
-     * @param myUserDetailsService the user details service class to retrieve UserDetails information.
-     */
     @Autowired
-    public JwtAuthenticationFilter(JWTService jwtService, MyUserDetailsService myUserDetailsService) {
-        this.jwtService = jwtService;
-        this.myUserDetailsService = myUserDetailsService;
-    }
+    private  JWTService jwtService;
+    @Autowired
+    private MyUserDetailsService myUserDetailsService;
+
 
     /**
      * Filters the request to perform JWT authentication.

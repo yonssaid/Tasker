@@ -60,11 +60,11 @@
         }
 
         nav ul li {
-            margin: 0 5px; /* Adjusted margin */
+            margin: 0 5px;
         }
 
         nav ul li:last-child {
-            margin-right: 20px; /* Larger margin for the last item */
+            margin-right: 25px;
         }
 
         nav ul li.signup {
@@ -75,13 +75,13 @@
             content: '';
             position: absolute;
             width: calc(100% + 20px);
-            height: 140%; /* Increased height */
-            top: -10%; /* Adjusted top position */
+            height: 140%;
+            top: -10%;
             left: -10px;
             background-color: #1f66e5;
             border-radius: 20px;
             z-index: -1;
-            transform: scaleY(0.8); /* Adjust the curve effect */
+            transform: scaleY(0.8);
             transition: transform 0.3s;
         }
 
@@ -91,9 +91,9 @@
 
         nav ul li a {
             text-decoration: none;
-            color: #555; /* Changed default color */
+            color: #555;
             font-weight: 600;
-            padding: 10px 15px; /* Adjusted padding */
+            padding: 10px 15px;
             transition: color 0.3s;
             position: relative;
             z-index: 1;
@@ -107,10 +107,46 @@
             color: #fff;
         }
 
+        nav ul li.dashboard {
+            position: relative;
+        }
+
+        nav ul li.dashboard::before {
+            content: '';
+            position: absolute;
+            width: calc(100% + 10px);
+            height: 140%;
+            top: -15%;
+            left: -5px;
+            background-color: #1f66e5;
+            border-radius: 20px;
+            z-index: -1;
+            transform: scaleY(0.8);
+            transition: transform 0.3s;
+            align-items: center;
+            justify-content: center;
+        }
+
+        nav ul li.dashboard:hover::before {
+            transform: scaleY(1);
+        }
+
+        nav ul li.dashboard a {
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        nav ul li.dashboard a:hover {
+            color: #fff;
+        }
+
         main {
             display: flex;
             min-height: 80vh;
-            margin-top: 80px; /* Adjusted to account for fixed nav */
+            margin-top: 80px;
             position: relative;
             overflow: hidden;
         }
@@ -144,33 +180,53 @@
             z-index: 1;
             color: #fff;
             text-align: left;
-            max-width: 80%; /* Adjusted max-width for content */
+            max-width: 80%;
         }
 
         .content .slogan {
-            font-size: 36px; /* Adjusted font size */
+            font-size: 36px;
             font-weight: 600;
             margin-bottom: 10px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         }
 
         .content p {
-            font-size: 18px; /* Adjusted font size */
+            font-size: 18px;
             margin-bottom: 20px;
         }
 
-        .signup-button {
+        .dashboard-button {
             display: block;
             width: 100%;
             padding: 15px 0;
-            background: #1f66e5; /* Solid blue color */
+            background: #1f66e5;
             color: #fff;
             text-decoration: none;
             font-size: 20px;
             text-align: center;
             border-radius: 8px;
             transition: background 0.3s, color 0.3s, border 0.3s;
-            margin-top: 20px; /* Adjusted margin */
+            margin-top: 20px;
+        }
+
+        .dashboard-button:hover {
+            background: linear-gradient(45deg, #2575fc, #6a11cb);
+            color: #fff;
+            border: 2px solid #2575fc;
+        }
+
+        .signup-button {
+            display: block;
+            width: 100%;
+            padding: 15px 0;
+            background: #1f66e5;
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+            text-align: center;
+            border-radius: 8px;
+            transition: background 0.3s, color 0.3s, border 0.3s;
+            margin-top: 20px;
         }
 
         .signup-button:hover {
@@ -185,7 +241,7 @@
             padding: 10px;
             text-align: center;
             font-size: 14px;
-            margin-top: 20px; /* Adjusted margin */
+            margin-top: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -205,7 +261,11 @@
         }
 
         .social-icons a:hover {
-            color: #6a11cb;
+            color: #004285;
+        }
+
+        .user-name {
+            color: #1f66e5;
         }
     </style>
 </head>
@@ -217,12 +277,12 @@
             <span>TASKER</span>
         </a>
     </div>
-    <ul>
+    <ul id="nav-links">
         <li><a href="/features">Features</a></li>
         <li><a href="/aboutus">About Us</a></li>
         <li><a href="/contact">Contact</a></li>
-        <li class="signup"><a href="/register">Signup</a></li>
-        <li><a href="/login">Login</a></li>
+        <li id="signup-link" class="signup"><a href="/register">Signup</a></li>
+        <li id="login-link"><a href="/login">Login</a></li>
     </ul>
 </nav>
 <main>
@@ -235,7 +295,8 @@
             <div class="feature-section">
                 <p class="slogan">Master your day, one task at a time!</p>
                 <p>Customize your task lists and track your progress effortlessly with Tasker.</p>
-                <a href="/register" class="signup-button">Sign up for free!</a>
+                <a id="main-signup-button" href="/register" class="signup-button">Sign up for free!</a>
+                <a id="dashboard-button" href="/user/home" class="dashboard-button" style="display: none;">Go to Dashboard</a>
             </div>
         </div>
     </div>
@@ -244,10 +305,78 @@
     <div class="social-icons">
         <a href="#"><i class="fab fa-facebook-f"></i></a>
         <a href="#"><i class="fab fa-twitter"></i></a>
-        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        <a href="https://www.linkedin.com/in/yonssaid/"><i class="fab fa-linkedin-in"></i></a>
         <a href="#"><i class="fab fa-instagram"></i></a>
     </div>
     <p>&copy; 2024 Tasker. All rights reserved.</p>
 </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        fetch('/api/auth/isAuth', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.authenticated) {
+                    document.getElementById('signup-link').style.display = 'none';
+                    document.getElementById('login-link').style.display = 'none';
+                    document.getElementById('main-signup-button').style.display = 'none';
+
+                    const dashboardLink = document.createElement('li');
+                    dashboardLink.classList.add('dashboard');
+                    dashboardLink.innerHTML = '<a href="/user/home">Dashboard</a>';
+                    document.getElementById('nav-links').appendChild(dashboardLink);
+                    document.getElementById('dashboard-button').style.display = 'block';
+
+                    const logoutLink = document.createElement('li');
+                    logoutLink.classList.add('logout');
+                    logoutLink.innerHTML = '<a href="#">Logout</a>';
+
+
+                    logoutLink.addEventListener('click', function() {
+                        fetch('/api/auth/logout', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then(() => {
+                                window.location.href = '/';
+                            })
+                            .catch(error => {
+                                console.error('Error during logout:', error);
+                            });
+                    });
+
+
+                    document.getElementById('nav-links').appendChild(logoutLink);
+
+                    fetch('/api/users/info', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(userResponse => {
+                            const firstName = userResponse.firstName;
+                            const lastName = userResponse.lastName;
+                            document.querySelector('.feature-section p').textContent = '';
+                            document.querySelector('.slogan').innerHTML = `Hi <span class="user-name">${firstName}</span> <span class="user-name">${lastName}</span>, ready to control your tasks?`;                        })
+                        .catch(error => {
+                            console.error('Error fetching user info:', error);
+                        });
+                }
+            })
+            .catch(error => {
+                console.error('Error checking authentication:', error);
+            });
+    });
+</script>
+
 </body>
 </html>

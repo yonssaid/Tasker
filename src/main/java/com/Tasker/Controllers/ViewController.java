@@ -52,13 +52,52 @@ public class ViewController {
     }
 
     /**
+     * Displays the features page.
+     *
+     * @return the name of the features view.
+     */
+    @GetMapping("/features")
+    public String showFeaturesPage() {
+        return "features";
+    }
+
+    /**
+     * Displays the contact page.
+     *
+     * @return the name of the contactt us view.
+     */
+    @GetMapping("/contact")
+    public String showContactPage() {
+        return "contact";
+    }
+
+    /**
      * Displays the user home page.
      *
      * @return the name of the user home view.
      */
     @GetMapping("/user/home")
     public String showUserHome() {
-        return "forward:/userhome2.html";
+        return "forward:/userhome.html";
+    }
+
+    /**
+     * Displays the calendar view page.
+     *
+     * @return the name of the calendar view page.
+     */
+    @GetMapping("/user/home/calendar")
+    public String showCalendarView() {
+        return "forward:/userhome.html";
+    }
+    /**
+     * Displays the table view page.
+     *
+     * @return the name of the table view page.
+     */
+    @GetMapping("/user/home/table")
+    public String showTableView() {
+        return "forward:/userhome.html";
     }
 
     /**
