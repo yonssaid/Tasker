@@ -19,6 +19,10 @@
     padding: 10px;
     color: #fff;
 }
+.custom-toolbar > div {
+    display: flex;
+    gap: 5px;
+}
 
 .custom-toolbar button {
     background: #007bff;
@@ -81,5 +85,11 @@
 .rbc-month-view .rbc-month-header {
     background-color: #2e2e2e;
     color: #fff;
+}
+
+.custom-event.overdue {
+    background-color: #f44336 !important;
+    color: #fff !important;
+    border-radius: 5px;
 }
 

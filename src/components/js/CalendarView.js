@@ -5,16 +5,19 @@ import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../css/CalendarView.css';
 
-const CustomToolbar = ({ label, onNavigate}) => (
+const CustomToolbar = ({ label, onNavigate, onView }) => (
     <div className="custom-toolbar">
         <button onClick={() => onNavigate('PREV')}>Previous</button>
         <span>{label}</span>
-        <button onClick={() => onNavigate('NEXT')}>Next</button>
+        <div>
+            <button onClick={() => onView('month')}>Back to Month View</button>
+            <button onClick={() => onNavigate('NEXT')}>Next</button>
+        </div>
     </div>
 );
 
 const CustomEvent = ({ event }) => (
-    <div className="custom-event">
+    <div className={`custom-event ${event.overdue ? 'overdue' : ''}`}>
         <span>{event.title}</span>
     </div>
 );
@@ -30,11 +33,13 @@ const CalendarView = () => {
                 const response = await axios.get('/api/tasks/getAll');
                 const tasks = response.data;
 
+                const today = new Date();
                 const events = tasks.map(task => ({
                     title: task.title,
                     start: new Date(task.deadline),
                     end: new Date(task.deadline),
                     allDay: true,
+                    overdue: new Date(task.deadline) < today,
                 }));
 
                 setEvents(events);

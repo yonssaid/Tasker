@@ -1,0 +1,132 @@
+/* UserSettings CSS */
+
+.container {
+    max-width: 1000px;
+    width: 80%;
+    padding: 20px;
+    background-color: #1f1f1f;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgb(31, 31, 31);
+    margin: 0 auto;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #f4f4f5;
+}
+
+.infoSection {
+    margin-bottom: 20px;
+}
+
+.infoItem {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.infoItem label {
+    width: 30%;
+    font-weight: bold;
+    color: #f4f4f5;
+}
+
+.infoValue {
+    flex: 1;
+    padding: 10px;
+    color: #f4f4f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #333;
+    font-size: 14px;
+}
+
+.input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.input:focus {
+    background-color: #fff;
+    border-color: #007bff;
+    outline: none;
+}
+
+.editIcon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.editIcon:hover {
+    color: #0056b3;
+}
+
+.button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.message {
+    color: #d9534f;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.successMessage {
+    color: #0dc164;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.passwordItem {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.passwordItem input {
+    flex: 1;
+}
+
+.toggleButton {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    color: #007bff;
+}
+
+.toggleButton:hover {
+    color: #0056b3;
+}
+
+.passwordMismatch {
+    color: #d9534f;
+    font-size: 14px;
+    margin-bottom: 10px;
+}

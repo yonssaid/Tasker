@@ -7,28 +7,17 @@ import { FaSortAlphaDown, FaSortAlphaUp } from 'react-icons/fa';
 import { MdArrowDownward, MdArrowUpward } from 'react-icons/md';
 import { IoCalendarOutline, IoCalendarSharp } from 'react-icons/io5';
 
-const TaskTable = () => {
-    const [tasks, setTasks] = useState([]);
+const TaskTable = ({ tasks, updateTasks, handleSortByTitle, handleSortByDeadline, handleSortByPriority, sortOrder }) => {
     const [categories, setCategories] = useState({});
-    const [sortOrder, setSortOrder] = useState({
-        title: 'asc',
-        priority: 'asc',
-        deadline: 'asc'
-    });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
     const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
-    const [confirmAction, setConfirmAction] = useState(null);
     const [confirmMessage, setConfirmMessage] = useState('');
 
     useEffect(() => {
-        const fetchTasks = async () => {
+        const fetchCategories = async () => {
             try {
-                const response = await axios.get('/api/tasks/getAll');
-                const tasksData = response.data;
-                setTasks(tasksData);
-
-                const categoryPromises = tasksData.map(task =>
+                const categoryPromises = tasks.map(task =>
                     axios.get(`/api/taskcategories/${task.id}`)
                         .then(categoryResponse => {
                             const categoryData = categoryResponse.data;
@@ -51,97 +40,66 @@ const TaskTable = () => {
 
                 setCategories(categoriesMap);
             } catch (error) {
-                console.error('Error fetching tasks:', error);
+                console.error('Error fetching categories:', error);
             }
         };
 
-        fetchTasks();
-    }, []);
+        fetchCategories();
+    }, [tasks]);
 
-    const toggleSortOrder = (key) => {
-        setSortOrder(prevOrder => ({
-            ...prevOrder,
-            [key]: prevOrder[key] === 'asc' ? 'desc' : 'asc'
-        }));
-    };
-
-    const handleSortByTitle = () => {
-        toggleSortOrder('title');
-        const sortedTasks = [...tasks].sort((a, b) => {
-            return sortOrder.title === 'asc'
-                ? a.title.localeCompare(b.title)
-                : b.title.localeCompare(a.title);
-        });
-        setTasks(sortedTasks);
-    };
-
-    const handleSortByDeadline = () => {
-        toggleSortOrder('deadline');
-        const sortedTasks = [...tasks].sort((a, b) => {
-            return sortOrder.deadline === 'asc'
-                ? new Date(a.deadline) - new Date(b.deadline)
-                : new Date(b.deadline) - new Date(a.deadline);
-        });
-        setTasks(sortedTasks);
-    };
-
-    const handleSortByPriority = () => {
-        toggleSortOrder('priority');
-        const priorityOrder = { 'Critical': 4, 'High': 3, 'Medium': 2, 'Low': 1 };
-        const sortedTasks = [...tasks].sort((a, b) => {
-            return sortOrder.priority === 'asc'
-                ? priorityOrder[a.priority] - priorityOrder[b.priority]
-                : priorityOrder[b.priority] - priorityOrder[a.priority];
-        });
-        setTasks(sortedTasks);
-    };
-
-    const openConfirmModal = (action, message) => {
-        setConfirmAction(() => action);
+    const openConfirmModal = (message) => {
         setConfirmMessage(message);
         setIsConfirmModalOpen(true);
     };
 
-    const handleConfirm = async () => {
-        if (confirmAction) {
-            await confirmAction();
+    const handleConfirmEdit = async (updatedTask) => {
+        try {
+            const taskDto = {
+                title: updatedTask.title,
+                description: updatedTask.description,
+                category: updatedTask.category,
+                status: updatedTask.status,
+                priority: updatedTask.priority,
+                deadline: updatedTask.deadline
+            };
+
+            await axios.put(`/api/tasks/${updatedTask.id}`, taskDto);
+            updateTasks();
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error('Error updating task:', error);
+        }
+        setIsConfirmModalOpen(false);
+    };
+
+    const handleConfirmDelete = async (taskId) => {
+        try {
+            await axios.delete(`/api/taskcategories/${taskId}`);
+            await axios.delete(`/api/tasks/${taskId}`);
+            updateTasks();
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error('Error deleting task:', error);
         }
         setIsConfirmModalOpen(false);
     };
 
     const handleEdit = (updatedTask) => {
-        openConfirmModal(async () => {
-            try {
-                const taskDto = {
-                    title: updatedTask.title,
-                    category: updatedTask.category,
-                    status: updatedTask.status,
-                    priority: updatedTask.priority,
-                    deadline: updatedTask.deadline
-                };
-
-                await axios.put(`/api/tasks/${updatedTask.id}`, taskDto);
-                const response = await axios.get('/api/tasks/getAll');
-                setTasks(response.data);
-                setIsModalOpen(false);
-            } catch (error) {
-                console.error('Error updating task:', error);
-            }
-        }, 'Are you sure you want to save these changes?');
+        setSelectedTask(updatedTask);
+        openConfirmModal('Are you sure you want to save these changes?');
     };
 
     const handleDelete = (taskId) => {
-        openConfirmModal(async () => {
-            try {
-                await axios.delete(`/api/taskcategories/${taskId}`);
-                await axios.delete(`/api/tasks/${taskId}`);
-                const response = await axios.get('/api/tasks/getAll');
-                setTasks(response.data);
-                setIsModalOpen(false);
-            } catch (error) {
-                console.error('Error deleting task:', error);
-            }
-        }, 'Are you sure you want to delete this task?');
+        setSelectedTask({ id: taskId });
+        openConfirmModal('Are you sure you want to delete this task?');
+    };
+
+    const handleConfirm = async () => {
+        if (confirmMessage.includes('save')) {
+            await handleConfirmEdit(selectedTask);
+        } else if (confirmMessage.includes('delete')) {
+            await handleConfirmDelete(selectedTask.id);
+        }
     };
 
     const handleOpenModal = (task) => {
@@ -151,6 +109,29 @@ const TaskTable = () => {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+    };
+
+    const isOverdue = (task) => {
+        if (task.status === 'Completed') {
+            return false;
+        }
+        const today = new Date();
+        const taskDeadline = new Date(task.deadline);
+        return taskDeadline < today;
+    };
+
+    const toggleTaskStatus = async (task) => {
+        const updatedTask = {
+            ...task,
+            status: task.status === 'To-Do' ? 'Completed' : 'To-Do',
+            priority: 'Low'
+        };
+        try {
+            await axios.put(`/api/tasks/${updatedTask.id}`, updatedTask);
+            updateTasks();
+        } catch (error) {
+            console.error('Error updating task status:', error);
+        }
     };
 
     return (
@@ -165,17 +146,17 @@ const TaskTable = () => {
                 </div>
                 {tasks.map(task => (
                     <div
-                        className="task-grid-row"
+                        className={`task-grid-row ${isOverdue(task) ? 'overdue' : ''} ${task.status === 'Completed' ? 'completed-row' : ''}`}
                         key={task.id}
                     >
-                        <div
-                            className="task-title"
-                            onClick={() => handleOpenModal(task)}
-                        >
+                        <div className="task-title" onClick={() => handleOpenModal(task)}>
                             {task.title || 'No title'}
                         </div>
                         <div>{categories[task.id]?.name || 'No category'}</div>
-                        <div>{task.status || 'No status'}</div>
+                        <div className={`task-status ${task.status === 'Completed' ? 'completed' : 'todo'}`}
+                             onClick={() => toggleTaskStatus(task)}>
+                            {task.status || 'No status'}
+                        </div>
                         <div>{task.priority || 'No priority'}</div>
                         <div>{task.deadline || 'No deadline'}</div>
                     </div>
@@ -183,19 +164,19 @@ const TaskTable = () => {
             </div>
             <div className="task-sort-icons">
                 {sortOrder.title === 'asc' ? (
-                    <FaSortAlphaDown onClick={handleSortByTitle} title="Sort A-Z" />
+                    <FaSortAlphaDown onClick={handleSortByTitle} title="Sort A-Z"/>
                 ) : (
-                    <FaSortAlphaUp onClick={handleSortByTitle} title="Sort Z-A" />
+                    <FaSortAlphaUp onClick={handleSortByTitle} title="Sort Z-A"/>
                 )}
                 {sortOrder.priority === 'asc' ? (
-                    <MdArrowDownward onClick={handleSortByPriority} title="Sort by Priority Low-High" />
+                    <MdArrowDownward onClick={handleSortByPriority} title="Sort by Priority Low-High"/>
                 ) : (
-                    <MdArrowUpward onClick={handleSortByPriority} title="Sort by Priority High-Low" />
+                    <MdArrowUpward onClick={handleSortByPriority} title="Sort by Priority High-Low"/>
                 )}
                 {sortOrder.deadline === 'asc' ? (
-                    <IoCalendarOutline onClick={handleSortByDeadline} title="Sort by Date Ascending" />
+                    <IoCalendarOutline onClick={handleSortByDeadline} title="Sort by Date Ascending"/>
                 ) : (
-                    <IoCalendarSharp onClick={handleSortByDeadline} title="Sort by Date Descending" />
+                    <IoCalendarSharp onClick={handleSortByDeadline} title="Sort by Date Descending"/>
                 )}
             </div>
             <ChangeModal

@@ -5,7 +5,7 @@ import '../css/CreationModal.css';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-const CreationModal = ({ show, closeModal, createTask, categories = [], fetchCategories }) => {
+const CreationModal = ({ show, closeModal, createTask, categories = [], fetchCategories, fetchTasks }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [deadline, setDeadline] = useState(new Date());
@@ -19,6 +19,7 @@ const CreationModal = ({ show, closeModal, createTask, categories = [], fetchCat
         try {
             await createTask({ title, description, deadline, priority }, category);
             closeModal();
+            fetchTasks();
         } catch (error) {
             console.error('Error creating task:', error);
         }

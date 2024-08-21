@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import '../css/ChangeModal.css';
-import ConfirmationModal from './ConfirmationModal';
 import axios from 'axios';
 
 const ChangeModal = ({ isOpen, onClose, task, onEdit, onDelete }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editTask, setEditTask] = useState(task);
     const [categories, setCategories] = useState([]);
-    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [taskCategoryName, setTaskCategoryName] = useState('No category');
 
     useEffect(() => {
         setEditTask(task);
@@ -17,6 +16,7 @@ const ChangeModal = ({ isOpen, onClose, task, onEdit, onDelete }) => {
     useEffect(() => {
         if (isOpen) {
             fetchCategories();
+            fetchCategoryForTask();
         }
     }, [isOpen]);
 
@@ -26,20 +26,39 @@ const ChangeModal = ({ isOpen, onClose, task, onEdit, onDelete }) => {
             const data = response.data.map(category => {
                 try {
                     const parsedName = JSON.parse(category.name);
-                    return { ...category, name: parsedName.name || category.name };
+                    return { id: category.id, name: parsedName.name || category.name };
                 } catch {
-                    return category;
+                    return { id: category.id, name: category.name };
                 }
             });
             setCategories(data);
-            if (task && task.category) {
-                setEditTask((prevTask) => ({
+
+            const matchingCategory = data.find(cat => cat.name === taskCategoryName);
+            if (matchingCategory) {
+                setEditTask(prevTask => ({
                     ...prevTask,
-                    category: task.category
+                    category: matchingCategory.id.toString()
                 }));
             }
+
         } catch (error) {
             console.error('Error fetching categories:', error);
+        }
+    };
+    const fetchCategoryForTask = async () => {
+        if (!task || !task.id) return;
+
+        try {
+            const response = await axios.get(`/api/taskcategories/${task.id}`);
+            const categoryData = response.data;
+            const category = typeof categoryData.name === 'string'
+                ? JSON.parse(categoryData.name)
+                : categoryData;
+
+            setTaskCategoryName(category ? category.name : 'No category');
+        } catch (error) {
+            console.error('Error fetching category for task:', error);
+            setTaskCategoryName('No category');
         }
     };
 
@@ -54,7 +73,7 @@ const ChangeModal = ({ isOpen, onClose, task, onEdit, onDelete }) => {
     };
 
     const validateTask = (task) => {
-        return task.title && task.category && task.status;
+        return task.title && task.category && task.status && task.description;
     };
 
     const handleSave = () => {
@@ -62,31 +81,13 @@ const ChangeModal = ({ isOpen, onClose, task, onEdit, onDelete }) => {
             alert('Please fill in all required fields.');
             return;
         }
-        setShowConfirmation(true);
+        onEdit(editTask);
+        onClose();
     };
 
-    const handleConfirmSave = async (confirmed) => {
-        setShowConfirmation(false);
-        if (confirmed) {
-            try {
-                await onEdit(editTask);
-                setIsEditing(false);
-                onClose();
-            } catch (error) {
-                console.error('Failed to save changes:', error);
-            }
-        }
-    };
-
-    const handleDelete = async () => {
-        if (window.confirm('Are you sure you want to delete this task?')) {
-            try {
-                await onDelete(task.id);
-                onClose();
-            } catch (error) {
-                console.error('Failed to delete task:', error);
-            }
-        }
+    const handleDelete = () => {
+        onDelete(task.id);
+        onClose();
     };
 
     return (
@@ -109,6 +110,14 @@ const ChangeModal = ({ isOpen, onClose, task, onEdit, onDelete }) => {
                                     value={editTask.title || ''}
                                     onChange={handleChange}
                                 />
+                            </label>
+                            <label>
+                                Description:
+                                <br/>
+                                <textarea
+                                name="description" value={editTask.description || ''}
+                                onChange={handleChange}
+                            />
                             </label>
                             <label>
                                 Category:
@@ -162,7 +171,8 @@ const ChangeModal = ({ isOpen, onClose, task, onEdit, onDelete }) => {
                     ) : (
                         <div>
                             <p><strong>Title:</strong> {task.title || 'No title'}</p>
-                            <p><strong>Category:</strong> {task.category || 'No category'}</p>
+                            <p><strong>Description:</strong> {task.description || 'No description'}</p>
+                            <p><strong>Category:</strong> {taskCategoryName}</p>
                             <p><strong>Status:</strong> {task.status || 'No status'}</p>
                             <p><strong>Priority:</strong> {task.priority || 'No priority'}</p>
                             <p><strong>Deadline:</strong> {task.deadline || 'No deadline'}</p>
@@ -173,18 +183,15 @@ const ChangeModal = ({ isOpen, onClose, task, onEdit, onDelete }) => {
                     {isEditing ? (
                         <button onClick={handleSave} className="save-button">Save</button>
                     ) : (
-                        <button onClick={() => setIsEditing(true)} className="edit-button">Edit</button>
+                        <>
+                            <button onClick={() => setIsEditing(true)} className="edit-button">Edit</button>
+                            <button onClick={handleDelete} className="delete-button">
+                                <i className="fas fa-trash"></i>
+                            </button>
+                        </>
                     )}
-                    <button onClick={handleDelete} className="delete-button">Delete</button>
                 </div>
             </div>
-            {showConfirmation && (
-                <ConfirmationModal
-                    isOpen={showConfirmation}
-                    message="Are you sure you want to save these changes?"
-                    onConfirm={handleConfirmSave}
-                />
-            )}
         </div>
     );
 };

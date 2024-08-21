@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Sidebar.css';
-import { FaHome, FaCalendarAlt, FaCog, FaSignOutAlt } from 'react-icons/fa';
-import ProfilePic from '../../assets/profile-pic.jpg';
+import { FaTable, FaCalendarAlt, FaCog, FaSignOutAlt, FaHome } from 'react-icons/fa';
 
 function Sidebar({ logout }) {
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const navigate = useNavigate();
+    const profileMenuRef = useRef(null);
 
     const toggleProfileMenu = () => {
         setProfileMenuOpen(!profileMenuOpen);
@@ -16,27 +16,49 @@ function Sidebar({ logout }) {
         navigate(path);
     };
 
+    const handleClickOutside = (event) => {
+        if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+            setProfileMenuOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className="sidebar">
-            <div className="logo">
-                <img src="/images/Tasker_Logo.png" alt="Tasker Logo" />
+        <div className="sidebar" role="navigation" aria-label="Sidebar Navigation">
+            <div className="logo-container" onClick={() => navigateTo('/user/home')} role="button" aria-label="Home">
+                <div className="logo">
+                    <img src="/images/Tasker_Logo.png" alt="Tasker Logo" />
+                </div>
+                <div className="logo-icon">
+                    <FaHome aria-hidden="true" />
+                </div>
             </div>
-            <div className="nav-item" onClick={() => navigateTo('/')}>
-                <FaHome className="nav-icon" />
+
+            <div className="nav-container">
+                <div className="nav-item" onClick={() => navigateTo('/user/home/table')} role="button" aria-label="Table">
+                    <FaTable className="nav-icon" aria-hidden="true" />
+                </div>
+                <div className="nav-item" onClick={() => navigateTo('/user/home/calendar')} role="button" aria-label="Calendar">
+                    <FaCalendarAlt className="nav-icon" aria-hidden="true" />
+                </div>
             </div>
-            <div className="nav-item" onClick={() => navigateTo('/calendar')}>
-                <FaCalendarAlt className="nav-icon" />
-            </div>
-            <div className="profile-section" onClick={toggleProfileMenu}>
-                <img src={ProfilePic} alt="Profile" className="profile-pic" />
+
+            <div className="profile-section" onClick={toggleProfileMenu} role="button" aria-label="Profile Menu">
+                <FaCog className="nav-icon gear1" aria-hidden="true"/>
                 {profileMenuOpen && (
-                    <div className="profile-menu">
-                        <div className="profile-menu-item settings">
-                            <FaCog className="nav-icon gear" />
-                            <span>Settings</span>
+                    <div className="profile-menu" ref={profileMenuRef}>
+                        <div className="profile-menu-item settings" onClick={() => navigateTo('/user/settings')}>
+                            <FaCog className="nav-icon gear2" aria-hidden="true" />
+                            <span>All Settings</span>
                         </div>
-                        <div className="profile-menu-item logout" onClick={logout}>
-                            <FaSignOutAlt className="nav-icon" />
+                        <div className="profile-menu-item logout" onClick={logout} role="button" aria-label="Logout">
+                            <FaSignOutAlt className="nav-icon" aria-hidden="true" />
                             <span>Logout</span>
                         </div>
                     </div>

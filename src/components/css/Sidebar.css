@@ -6,34 +6,73 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 10px 0 60px 0;
+    padding: 10px 0;
     position: fixed;
     top: 0;
     left: 0;
 }
 
-.logo {
+.logo-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
     position: relative;
+    cursor: pointer;
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s; /* Add transition for smooth sliding */
 }
 
 .logo img {
-    height: 40px;
-    margin-bottom: 20px;
-    position: relative;
+    width: 100%;
+    height: auto;
 }
 
-.logo::after {
+.logo-icon {
+    position: absolute;
+    font-size: 40px;
+    color: #e0e0e0;
+    opacity: 0;
+    transition: opacity 0.3s; /* Ensure opacity transition */
+}
+
+/* Hover Effect for Logo */
+.logo-container:hover .logo {
+    transform: translateX(-50px); /* Slide the logo to the left */
+}
+
+.logo-container:hover .logo-icon {
+    opacity: 1; /* Make the icon visible */
+}
+
+/* Navigation Container */
+.nav-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin-bottom: 10%;
+}
+
+/* Line before Navigation Items */
+.nav-container::before {
     content: '';
     display: block;
-    width: 150%;
+    width: 75%;
     height: 1px;
     background-color: #444;
     position: absolute;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
-    bottom: -0.005px;
 }
 
+/* Navigation Items */
 .nav-item {
     display: flex;
     align-items: center;
@@ -43,32 +82,26 @@
     color: #e0e0e0;
     cursor: pointer;
     transition: background-color 0.3s;
-    position: relative;
 }
 
 .nav-item:hover {
     background-color: #333;
 }
 
-.nav-item span {
-    margin-left: 10px;
-}
-
 .nav-icon {
-    height: 40px;
     width: 40px;
-    flex-shrink: 0;
+    height: 40px;
 }
 
 /* Profile Section */
 .profile-section {
-    margin-top: 550px;
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
     padding: 10px 0;
     position: relative;
+    margin-top: 68vh;
 }
 
 .profile-section::before {
@@ -78,22 +111,17 @@
     height: 1px;
     background-color: #444;
     position: absolute;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
-    top: -6px;
-}
-
-.profile-pic {
-    height: 40px;
-    width: 40px;
-    border-radius: 50%;
 }
 
 .profile-menu {
+    margin-left: 8vh;
     position: absolute;
-    bottom: 0.025%;
-    left: 155%;
-    transform: translateY(-10%);
+    bottom: 50px;
+    left: 100%;
+    transform: translateX(-50%);
     background-color: #2e2e2e;
     border-radius: 8px;
     overflow: hidden;
@@ -121,7 +149,6 @@
     margin-right: 10px;
 }
 
-/* Animation for Gear Icon */
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -131,10 +158,12 @@
     }
 }
 
-.nav-icon.gear {
+.nav-icon.gear1 {
     transition: transform 0.5s ease;
 }
 
-.profile-menu-item.settings:hover .nav-icon.gear {
+.profile-section:hover .nav-icon.gear1 {
     animation: spin 1s linear infinite;
 }
+
+
