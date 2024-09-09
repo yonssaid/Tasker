@@ -115,9 +115,9 @@ const ChangeModal = ({ isOpen, onClose, task, onEdit, onDelete }) => {
                                 Description:
                                 <br/>
                                 <textarea
-                                name="description" value={editTask.description || ''}
-                                onChange={handleChange}
-                            />
+                                    name="description" value={editTask.description || ''}
+                                    onChange={handleChange}
+                                />
                             </label>
                             <label>
                                 Category:

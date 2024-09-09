@@ -1,0 +1,121 @@
+/* Task Management Container */
+.task-management-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.back-button-container {
+    margin-bottom: 20px;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #007bff;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Edit Task Form */
+.edit-task-form {
+    width: 80%;
+    background-color: #393939;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.edit-task-form h3 {
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.edit-task-form label {
+    display: block;
+    margin-bottom: 10px;
+    color: #fff;
+}
+
+.edit-task-form input,
+.edit-task-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #000;
+}
+
+.edit-task-form button {
+    padding: 10px 20px;
+    background-color: #38b600;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.edit-task-form button:hover {
+    background-color: #006c06;
+}
+
+/* Task Table */
+.admin-tasks-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.admin-tasks-table th,
+.admin-tasks-table td {
+    padding: 10px;
+    border: 1px solid #606060;
+    text-align: left;
+    color: #fff;
+}
+
+.admin-tasks-table th {
+    background-color: #606060;
+    font-weight: bold;
+}
+
+.admin-tasks-table tr:nth-child(even) {
+    background-color: #606060;
+}
+
+.admin-tasks-table tr:nth-child(odd) {
+    background-color: #393939;
+}
+
+.admin-tasks-table button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.admin-tasks-table .edit-button {
+    background-color: #29ba98;
+}
+
+.admin-tasks-table .edit-button:hover {
+    background-color: #0b5c42;
+}
+
+.admin-tasks-table .delete-button {
+    background-color: #dc3545;
+}
+
+.admin-tasks-table .delete-button:hover {
+    background-color: #c82333;
+}
