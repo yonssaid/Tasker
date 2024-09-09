@@ -90,6 +90,7 @@ public class ViewController {
     public String showCalendarView() {
         return "forward:/userhome.html";
     }
+
     /**
      * Displays the table view page.
      *
@@ -101,12 +102,43 @@ public class ViewController {
     }
 
     /**
-     * Displays the admin home page.
+     * Displays the admin tools page.
      *
-     * @return the name of the admin home view.
+     * @return the name of the table view page.
      */
-    @GetMapping("/admin/home")
-    public String showAdminHome() {
-        return "adminhome";
+    @GetMapping("/admin/tools")
+    public String showAdminTools() {
+        return "forward:/userhome.html";
     }
+
+    /**
+     * Displays the admin users page.
+     *
+     * @return the name of the users view page.
+     */
+    @GetMapping("/admin/users")
+    public String showAdminUsers() {
+        return "forward:/userhome.html";
+    }
+
+    /**
+     * Displays the admin tasks page.
+     *
+     * @return the name of the tasks view page.
+     */
+    @GetMapping("/admin/tasks")
+    public String showAdminTasks() {
+        return "forward:/userhome.html";
+    }
+
+    /**
+     * Displays the admin logistics dashboard page.
+     *
+     * @return the name of the logistics view page.
+     */
+    @GetMapping("/admin/logistics")
+    public String showAdminLogisticsDashboard() {
+        return "forward:/userhome.html";
+    }
+
 }

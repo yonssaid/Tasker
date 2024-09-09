@@ -108,8 +108,7 @@ public class SecurityConfig {
                     ).permitAll();
 
                     registry.requestMatchers(
-                            "/admin/**",
-                            "/admin/home"
+                            "/api/admin/**"
                     ).hasRole("ADMIN");
 
                     registry.requestMatchers(

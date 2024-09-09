@@ -253,31 +253,28 @@
                   dashboardLink.innerHTML = '<a href="/user/home">Dashboard</a>';
 
                   document.getElementById('nav-links').appendChild(dashboardLink);
+
+                  const logoutLink = document.createElement('li');
+                  logoutLink.classList.add('logout');
+                  logoutLink.innerHTML = '<a href="#">Logout</a>';
+
+                  logoutLink.addEventListener('click', function() {
+                    fetch('/api/auth/logout', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json'
+                      }
+                    })
+                            .then(() => {
+                              window.location.href = '/';
+                            })
+                            .catch(error => {
+                              console.error('Error during logout:', error);
+                            });
+                  });
+
+                  document.getElementById('nav-links').appendChild(logoutLink);
                 }
-
-                const logoutLink = document.createElement('li');
-                logoutLink.classList.add('logout');
-                logoutLink.innerHTML = '<a href="#">Logout</a>';
-
-
-                logoutLink.addEventListener('click', function() {
-                  fetch('/api/auth/logout', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json'
-                    }
-                  })
-                          .then(() => {
-                            window.location.href = '/';
-                          })
-                          .catch(error => {
-                            console.error('Error during logout:', error);
-                          });
-                });
-
-
-                document.getElementById('nav-links').appendChild(logoutLink);
-
               })
               .catch(error => {
                 console.error('Error checking authentication:', error);

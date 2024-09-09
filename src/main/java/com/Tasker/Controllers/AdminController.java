@@ -1,6 +1,9 @@
 package com.Tasker.Controllers;
 
+import com.Tasker.Dto.RegisterAdminDto;
+import com.Tasker.Dto.UpdateUserDto;
 import com.Tasker.Models.MyUser;
+import com.Tasker.Models.Task;
 import com.Tasker.Services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,7 @@ import java.util.List;
  * @author Yons Said
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
 
     private final AdminService adminService;
@@ -57,6 +60,16 @@ public class AdminController {
         return ResponseEntity.ok("Admin endpoint accessed.");
     }
 
+    @PostMapping("/users/create")
+    public ResponseEntity<String> createUser(@RequestBody RegisterAdminDto registerAdminDto) {
+        String result = adminService.createUser(registerAdminDto);
+        if (result.equals("User has been created successfully!")) {
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+        }
+    }
+
     /**
      * Retrieves all users.
      *
@@ -67,16 +80,6 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAllUsers());
     }
 
-    /**
-     * Creates a new user.
-     *
-     * @param myUser the user to create
-     * @return the created user
-     */
-    @PostMapping("/users")
-    public ResponseEntity<MyUser> createUser(@RequestBody MyUser myUser) {
-        return ResponseEntity.ok(adminService.createUser(myUser));
-    }
 
     /**
      * Deletes a user by their ID.
@@ -93,12 +96,25 @@ public class AdminController {
     /**
      * Updates a user by their ID.
      *
-     * @param id the ID of the user to update
-     * @param myUser the updated user information
-     * @return the updated user
+     * @param id the ID of the user to update.
+     * @param updateUserDto the DTO containing updated user information.
+     * @return the updated user.
      */
     @PutMapping("/users/{id}")
-    public ResponseEntity<MyUser> updateUser(@PathVariable Long id, @RequestBody MyUser myUser) {
-        return ResponseEntity.ok(adminService.updateUser(id, myUser));
+    public ResponseEntity<MyUser> updateUser(@PathVariable Long id, @RequestBody UpdateUserDto updateUserDto) {
+        System.out.println("Received updateUserDto: " + updateUserDto);
+        MyUser updatedUser = adminService.updateUser(id, updateUserDto);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+
+    /**
+     * Retrieves all tasks.
+     *
+     * @return a list of all tasks
+     */
+    @GetMapping("/tasks")
+    public ResponseEntity<List<Task>> getAllTasks() {
+        return ResponseEntity.ok(adminService.getAllTasks());
     }
 }

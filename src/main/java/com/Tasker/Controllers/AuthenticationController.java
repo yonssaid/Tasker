@@ -32,7 +32,7 @@ import java.util.Map;
  * @author Yons Said
  */
 @RestController
-@RequestMapping("/api/auth/")
+@RequestMapping("/api/auth")
 public class AuthenticationController {
 
     private final UserRepository userRepository;
@@ -40,6 +40,7 @@ public class AuthenticationController {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JWTService jwtService;
+    private final MyUserDetailsService myUserDetailsService;
 
     /**
      * Constructs an AuthenticationController with the specified dependencies.
@@ -59,6 +60,7 @@ public class AuthenticationController {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.myUserDetailsService = myUserDetailsService;
     }
 
 
@@ -68,7 +70,7 @@ public class AuthenticationController {
      * @param registerDto the data transfer object containing user registration details.
      * @return a ResponseEntity containing a success message or an error message if the username is taken.
      */
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
         if (userRepository.existsByUsername(registerDto.getUsername())) {
             return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
@@ -117,9 +119,7 @@ public class AuthenticationController {
 
             response.addCookie(cookie);
 
-            boolean isAdmin = authentication.getAuthorities().stream()
-                    .anyMatch(g -> g.getAuthority().equals("ROLE_ADMIN"));
-            String redirectUrl = isAdmin ? "/admin/home" : "/user/home";
+            String redirectUrl = "/user/home";
 
             return ResponseEntity.ok().body(Map.of("message", "Login successful!", "redirectUrl", redirectUrl));
 
@@ -168,5 +168,47 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(Map.of("authenticated", isAuthenticated));
     }
+
+
+    /**
+     * Checks if the authenticated user has the "ROLE_ADMIN" authority.
+     *
+     * @param request the HttpServletRequest object containing the cookies, including the JWT token.
+     * @return a ResponseEntity containing a Boolean value indicating whether the user is an admin.
+     *  If the JWT token is missing or invalid, returns a ResponseEntity with HTTP status 401 (Unauthorized) and false.
+     */
+    @GetMapping("/isAdmin")
+    public ResponseEntity<Boolean> isAdmin(HttpServletRequest request) {
+        try {
+            Cookie[] cookies = request.getCookies();
+            if (cookies == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+            }
+
+            String jwtToken = null;
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("jwtToken")) {
+                    jwtToken = cookie.getValue();
+                    break;
+                }
+            }
+
+            if (jwtToken == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+            }
+
+            String username = jwtService.extractUsername(jwtToken);
+
+            UserDetails userDetails = myUserDetailsService.loadUserByUsername(username);
+            boolean isAdmin = userDetails.getAuthorities().stream()
+                    .anyMatch(g -> g.getAuthority().equals("ROLE_ADMIN"));
+
+            return ResponseEntity.ok(isAdmin);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(false);
+        }
+    }
+
 
 }

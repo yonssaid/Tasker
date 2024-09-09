@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Service class for managing user-related operations.
@@ -230,4 +229,5 @@ public class UserService {
         }
         return Optional.empty();
     }
+
 }
