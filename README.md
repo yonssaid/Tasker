@@ -55,7 +55,6 @@ You can try out the live version of Tasker here: [Tasker App](https://tasker-app
 git clone https://github.com/yourusername/tasker.git
 cd tasker
 
-cd tasker
 ```
 ### 2. Back-End Setup:
 
