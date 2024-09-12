@@ -1,4 +1,4 @@
-# Tasker - A Simple Task Management App
+# Tasker - A Task Management Web App
 **Hosted at:** [Tasker App](https://tasker-app-bzga.onrender.com/)
 
 ## Overview
