@@ -36,7 +36,7 @@ I built Tasker to demonstrate my skills in:
 ## Live Demo
 You can try out the live version of Tasker here: [Tasker App](https://tasker-app-bzga.onrender.com/).
 
-> **Note**: The app is hosted on Render's free tier, so it may take a few seconds to respond if it has been idle. Please be patient while the app "wakes up."
+> **Note**: The app is hosted on Render's free tier, so it may take a 30 seconds to a minute to respond if it has been idle. Please be patient while the app "wakes up."
 
 ## Skills Demonstrated
 - **Full-Stack Development**: Designed and implemented both front-end and back-end components.
