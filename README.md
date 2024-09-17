@@ -2,7 +2,7 @@
 **Hosted at:** [Tasker App](https://tasker-app-bzga.onrender.com/)
 
 ## Overview
-Tasker is a full-stack task management application designed to provide a simple, intuitive solution for tracking and managing tasks, especially tailored for college students. This project showcases my experience in back-end and front-end development, using **Java 17**, **Gradle 7.6**, and **Spring Boot 3.3.1** on the back-end, with a **React** front-end for a responsive and user-friendly interface.
+Tasker is a full-stack task management application designed to provide a simple, intuitive solution for tracking and managing tasks, especially tailored for college students. This project showcases my experience in back-end and front-end development, using **Java**, **Gradle**, and **Spring Boot** on the back-end, with a **React**/**JavaScript** front-end for a responsive and user-friendly interface.
 
 I built Tasker to demonstrate my skills in:
 - **REST API development**
@@ -21,9 +21,9 @@ I built Tasker to demonstrate my skills in:
 ## Technologies Used
 
 ### Back-End (Java)
-- **Java 17**: Leveraging modern features of the latest long-term support (LTS) release.
-- **Spring Boot 3.3.1**: For rapid application development using RESTful API principles.
-- **Gradle 7.6**: Managing dependencies and building the project efficiently.
+- **Java (17)**: Leveraging modern features of the latest long-term support (LTS) release.
+- **Spring Boot (3.3.1)**: For rapid application development using RESTful API principles.
+- **Gradle**: Managing dependencies and building the project efficiently.
 - **JWT Authentication**: Secure, token-based authentication for user sessions.
 - **PostgreSQL**: Reliable, relational database for handling data persistence.
 - **Render**: Hosting the back-end for production.
