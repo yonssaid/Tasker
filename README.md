@@ -103,14 +103,17 @@ The app will be available at http://localhost:8000.
 
 ### Project Structure
 
-**Backend**    - Spring Boot code (REST API, JWT Authentication, PostgreSQL integration)
+**Backend**    - Spring Boot code (Java REST APIs, JWT Authentication, PostgreSQL integration and connection)
+
 **Frontend**   - React components, pages, and styling
+
 **docs**       - Documentation and API details
 
 
 ### Future Enhancements
 
 Task Filtering: Enable task filtering based on parameters such as deadlines or priority.
+
 Real-Time Notifications: Implement user notifications for task deadlines and status changes.
 
 
